@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recobook - Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}"></head>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo-text">Recobook</div>
+        </div>
+        
+        
+
+        <div class="nav-right">
+            <div class="logo-badge">
+                <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20">
+                <span>Recobook</span>
+            </div>
+        </div>
+    </header>
+
+        <nav class="sub-navbar">
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="quiz_page">Quiz</a></li>
+                <li><a href="/bookmarks_page">Bookmarks</a></li>
+                <li><a href="searchbook_page">Search Book</a></li>
+                <li class="active"><a href="#">Profile</a></li>
+            </ul>
+        </nav>
+
+    <main class="profile-container">
+        <div class="profile-header">
+            <div class="avatar-circle">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Picture">
+            </div>
+            <h2 class="profile-name">{{ user.name }}</h2>
+        </div>
+
+        <div class="profile-card">
+            <div class="profile-field">
+                <label>Name</label>
+                <div class="field-value">{{ user.name }}</div>
+            </div>
+
+            <div class="profile-field">
+                <label>Email</label>
+                <div class="field-value">{{ user.email }}</div>
+            </div>
+
+            <div class="profile-field">
+                <label>Password</label>
+                <div class="field-value">••••••••••••</div>
+            </div>
+
+            <div class="profile-actions">
+                <button class="edit-btn">Edit Profile</button>
+                <button class="logout-btn" onclick="window.location.href='/logout'">Log out</button>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

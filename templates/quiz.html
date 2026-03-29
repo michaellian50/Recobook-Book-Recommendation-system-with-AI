@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recobook - Discovery Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='quiz.css') }}"></head>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo-text">Recobook</div>
+        </div>
+        
+        <div class="nav-right">
+            <div class="logo-badge">
+                <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20">
+                <span>Recobook</span>
+            </div>
+        </div>
+    </header>
+
+    <nav class="sub-navbar">
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li class="active"><a href="#">Quiz</a></li>
+                <li><a href="/bookmarks_page">Bookmarks</a></li>
+                <li><a href="/searchbook_page">Search Book</a></li>
+                <li><a href="/profile_page">Profile</a></li>
+            </ul>
+        </nav>
+
+    <main class="quiz-container">
+        <div class="quiz-card">
+            <p id="questionNumber" class="question-number">Question 1 of 5</p>
+            <h2 id="questionText" class="question-text">How do you prefer your story to unfold?</h2>
+
+            <div id="optionsGroup" class="options-group">
+                </div>
+
+            <button id="nextBtn" class="next-btn">Next Question</button>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='quiz.js') }}"></script>
+</body>
+</html>

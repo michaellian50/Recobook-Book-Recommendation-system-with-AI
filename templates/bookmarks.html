@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recobook - My Bookmarks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bookmarks.css') }}">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo-text">Recobook</div>
+        </div>
+
+        <div class="nav-right">
+            <div class="logo-badge">
+                <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20">
+                <span>Recobook</span>
+            </div>
+        </div>
+    </header>
+
+    <nav class="sub-navbar">
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/quiz_page">Quiz</a></li>
+            <li class="active"><a href="#">Bookmarks</a></li>
+            <li><a href="/searchbook_page">Search Book</a></li>
+            <li><a href="/profile_page">Profile</a></li>
+        </ul>
+    </nav>
+
+    <main class="bookmarks-container">
+        <h1 class="page-title">Saved Bookmarks</h1>
+
+        <div class="bookmarks-list">
+            {% if books %}
+                {% for bookmark in books %}
+                <div class="bookmark-item">
+                    <div class="item-info">
+                        <div class="small-cover icon-mode">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="Book Icon" width="40">
+                        </div>
+                        <div class="text-details">
+                            <h3>{{ bookmark.book.title }}</h3>
+                            <p class="author-text">{{ bookmark.book.authors }}</p>
+                            <p class="saved-date" style="font-size: 0.8rem; color: #888;">
+                                Saved on: {{ bookmark.saved_at.strftime('%d %b %Y') }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="view-btn" onclick="window.location.href='/details/{{ bookmark.book_id }}'">View Details</button>
+                        <button class="remove-btn" onclick="removeBookmark('{{ bookmark.book_id }}')">Remove</button>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state" style="text-align: center; padding: 40px;">
+                    <p class="special-p">No bookmarks saved yet. Start exploring!</p>
+                    <button class="view-btn" onclick="window.location.href='/quiz_page'">Take the Quiz</button>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <script>
+        async function removeBookmark(bookId) {
+            if (confirm("Are you sure you want to remove this bookmark?")) {
+                const response = await fetch(`/api/bookmark/remove/${bookId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    location.reload(); // Refresh the page to show it's gone
+                } else {
+                    alert("Failed to remove bookmark.");
+                }
+            }
+        }
+    </script>
+</body>
+</html>

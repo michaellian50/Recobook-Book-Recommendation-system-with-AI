@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recobook - Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='result.css') }}">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo-text">Recobook</div>
+        </div>
+        <div class="nav-right">
+            <div class="logo-badge">
+                <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20">
+                <span>Recobook</span>
+            </div>
+        </div>
+    </header>
+
+    <nav class="sub-navbar">
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li class="active"><a href="/quiz_page">Quiz</a></li>
+            <li><a href="/bookmarks_page">Bookmarks</a></li>
+            <li><a href="/searchbook_page">Search Book</a></li>
+            <li><a href="/profile_page">Profile</a></li>
+        </ul>
+    </nav>
+
+    <main class="results-container">
+        <h1 class="results-title">Your Personalized Recommendation</h1>
+        
+        <div id="loading-container" style="text-align: center; padding: 50px;">
+            <p>Our AI is analyzing your profile...</p>
+            <div class="loader"></div> </div>
+
+        <div class="book-grid" id="book-grid">
+            </div>
+
+        <button class="retake-btn" onclick="window.location.href='/quiz_page'">Retake Quiz</button>
+    </main>
+
+    <script>
+        async function fetchRecommendations() {
+            const quizText = sessionStorage.getItem('user_quiz_prompt');
+            
+            if (!quizText) {
+                alert("No quiz data found. Please take the quiz first.");
+                window.location.href = '/quiz_page';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/recommend', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ quiz_text: quizText })
+                });
+
+                const books = await response.json();
+                
+                // Hide loading message
+                document.getElementById('loading-container').style.display = 'none';
+                
+                const grid = document.getElementById('book-grid');
+                grid.innerHTML = ''; // Clear the grid
+
+                books.forEach(book => {
+                // This is where you paste the new code
+                const bookCard = `
+                    <div class="book-card">
+                        <div class="book-cover icon-mode">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="Book Icon">
+                        </div>
+                        <div class="match-badge">${Math.round(book.match_score * 100)}% Match</div>
+                        <h3 class="book-title">${book.title}</h3>
+                        <p class="book-author">${book.authors}</p>
+                        <button class="details-btn" onclick="window.location.href='/details/${book.book_id}'">Details</button>
+                    </div>
+                `;
+                // This line actually injects the card into your HTML grid
+                grid.innerHTML += bookCard;
+                });
+
+            } catch (error) {
+                console.error("Error fetching recommendations:", error);
+                document.getElementById('loading-container').innerHTML = "<p>Something went wrong. Please ensure the server is running.</p>";
+            }
+        }
+
+        // Run the function as soon as the page loads
+        window.onload = fetchRecommendations;
+    </script>
+</body>
+</html>

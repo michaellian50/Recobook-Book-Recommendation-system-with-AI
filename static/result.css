@@ -1,0 +1,242 @@
+/* ... Keep Navbar CSS from the previous response ... */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+body {
+    background-color: #f1f9f1;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+    background-color: #f1f9f1;
+}
+/* Perfect Centered Navbar Logic */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-left, .nav-right {
+    flex: 1; /* These take up equal space on the sides */
+    display: flex;
+    align-items: center;
+}
+
+.nav-right {
+    justify-content: flex-end; /* Pushes the badge to the far right */
+}
+
+.nav-center {
+    flex: 2; /* Takes up the middle space */
+    display: flex;
+    justify-content: center; /* Centers the links inside the middle space */
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+/* 2. Sub-Navbar (The links below the white bar) */
+.sub-navbar {
+    display: flex;
+    justify-content: center;
+    padding: 30px 0 10px 0; /* Adds breathing room above the links */
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #444;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.nav-links li.active a {
+    color: #000;
+    border-bottom: 2px solid #000;
+    padding-bottom: 5px;
+}
+
+.logo-badge {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+}
+
+/* ... Keep the Navbar CSS from our previous session ... */
+
+.results-container {
+    max-width: 1100px;
+    margin: 60px auto;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.results-title {
+    font-size: 2.2rem;
+    font-weight: 500;
+    margin-bottom: 50px;
+}
+
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.book-card {
+    background: white;
+    padding: 20px;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.book-card:hover {
+    transform: translateY(-10px);
+}
+
+.book-cover {
+    width: 160px;
+    height: 240px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+}
+
+.book-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.match-badge {
+    background-color: #4d7c9a;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.book-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #222;
+}
+
+.book-author {
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+}
+
+/* New Details Button Styling */
+.details-btn {
+    background-color: transparent;
+    border: 2px solid #4d7c9a;
+    color: #4d7c9a;
+    padding: 8px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.details-btn:hover {
+    background-color: #4d7c9a;
+    color: white;
+}
+
+/* Retake Quiz Button */
+.retake-btn {
+    background-color: #aed9da;
+    border: none;
+    padding: 15px 50px;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.retake-btn:hover {
+    background-color: #93c1c2;
+}
+
+/* The Loading Spinner */
+.loader {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Recobook Blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1.5s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loading-container p {
+    font-family: 'Poppins', sans-serif;
+    color: #555;
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+
+/* Styling for the Icon-based Cover */
+.book-cover.icon-mode {
+    background-color: #f8f9fa; /* Light grey background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px; /* Match your existing card height */
+    border-radius: 8px 8px 0 0;
+    border-bottom: 1px solid #eee;
+}
+
+.book-cover.icon-mode img {
+    width: 60px; /* Smaller icon size */
+    height: 60px;
+    opacity: 0.6; /* Makes it look more like a subtle placeholder */
+}
+
+.book-card {
+    transition: transform 0.2s;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+}

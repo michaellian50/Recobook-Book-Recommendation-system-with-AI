@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recobook - Admin Dashboard</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo-text">Recobook</div>
+        </div>
+
+        <div class="nav-right">
+            <div class="logo-badge">
+                <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20">
+                <span>Recobook</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-container">
+        <div class="admin-controls">
+            <div class="controls-left">
+                <h1 class="admin-title">Admin</h1>
+                <div class="admin-search-box">
+                    <div class="search-icon-circle"></div>
+                    <input type="text" placeholder="Search book" id="adminSearch">
+                </div>
+            </div>
+            
+            <div class="controls-right">
+                <button class="btn-dark" onclick="alert('Open Add Book Form')">Add Book</button>
+                <select class="btn-dark dropdown-btn">
+                    <option>A to Z</option>
+                    <option>Z to A</option>
+                    <option>Newest</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="admin-list">
+            <div class="admin-book-item">
+                <h3 class="admin-book-title">The Great Gatsby</h3>
+                <div class="admin-actions">
+                    <button class="btn-white">Edit</button>
+                    <button class="btn-white">Delete</button>
+                </div>
+            </div>
+
+            <div class="admin-book-item">
+                <h3 class="admin-book-title">1984</h3>
+                <div class="admin-actions">
+                    <button class="btn-white">Edit</button>
+                    <button class="btn-white">Delete</button>
+                </div>
+            </div>
+
+            <div class="admin-book-item">
+                <h3 class="admin-book-title">Dune</h3>
+                <div class="admin-actions">
+                    <button class="btn-white">Edit</button>
+                    <button class="btn-white">Delete</button>
+                </div>
+            </div>
+
+            <div class="admin-book-item">
+                <h3 class="admin-book-title">To Kill a Mockingbird</h3>
+                <div class="admin-actions">
+                    <button class="btn-white">Edit</button>
+                    <button class="btn-white">Delete</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

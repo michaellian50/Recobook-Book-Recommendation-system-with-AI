@@ -1,0 +1,109 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f1f9f1; /* Light Sage Background */
+    color: #333;
+}
+
+/* Header Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.logo-badge {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+}
+
+/* Main Layout */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 60px;
+}
+
+h1 {
+    text-align: center;
+    font-weight: 400;
+    margin-bottom: 40px;
+    line-height: 1.4;
+}
+
+/* The Login Card */
+.login-card {
+    background-color: #4d7c9a; /* Slate Blue */
+    width: 400px;
+    padding: 50px 40px;
+    border-radius: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.login-card h2 {
+    color: white;
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 35px;
+}
+
+/* Input Fields */
+input {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 15px;
+    background-color: #b7e0e4; /* Light Blue-Green */
+    font-size: 1rem;
+    outline: none;
+}
+
+/* Button */
+.login-btn {
+    background-color: #b7e0e4;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.login-btn:hover {
+    background-color: white;
+}
+
+.footer-text {
+    margin-top: 25px;
+    font-size: 1.1rem;
+}
+
+.footer-text a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+}

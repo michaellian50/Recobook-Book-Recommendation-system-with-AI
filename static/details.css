@@ -1,0 +1,209 @@
+/* ... Keep Navbar CSS ... */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+body {
+    background-color: #f1f9f1;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+    background-color: #f1f9f1;
+}
+
+/* Perfect Centered Navbar Logic */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-left, .nav-right {
+    flex: 1; /* These take up equal space on the sides */
+    display: flex;
+    align-items: center;
+}
+
+.nav-right {
+    justify-content: flex-end; /* Pushes the badge to the far right */
+}
+
+.nav-center {
+    flex: 2; /* Takes up the middle space */
+    display: flex;
+    justify-content: center; /* Centers the links inside the middle space */
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+/* 2. Sub-Navbar (The links below the white bar) */
+.sub-navbar {
+    display: flex;
+    justify-content: center;
+    padding: 30px 0 10px 0; /* Adds breathing room above the links */
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #444;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.nav-links li.active a {
+    color: #000;
+    border-bottom: 2px solid #000;
+    padding-bottom: 5px;
+}
+
+.logo-badge {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+}
+.details-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.back-nav {
+    margin-bottom: 20px;
+}
+
+.back-link {
+    text-decoration: none;
+    color: #4d7c9a;
+    font-weight: 600;
+}
+
+.details-card {
+    display: flex;
+    gap: 60px;
+    background: white;
+    padding: 50px;
+    border-radius: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    align-items: flex-start;
+}
+
+/* Left Side Styling */
+.details-left {
+    flex: 0 0 300px;
+    text-align: center;
+}
+
+.large-book-cover {
+    width: 300px;
+    height: 450px;
+    background-color: #eee;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    margin-bottom: 20px;
+}
+
+.large-book-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.details-match-badge {
+    background-color: #4d7c9a;
+    color: white;
+    display: inline-block;
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Right Side Styling */
+.details-right {
+    flex: 1;
+    text-align: left;
+}
+
+.details-title {
+    font-size: 2.8rem;
+    margin-bottom: 5px;
+    color: #1a1a1a;
+}
+
+.details-author {
+    font-size: 1.4rem;
+    color: #666;
+    margin-bottom: 30px;
+    font-weight: 400;
+}
+
+.info-section {
+    margin-bottom: 25px;
+}
+
+.info-section h4 {
+    font-size: 1.1rem;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.summary-text {
+    line-height: 1.8;
+    color: #444;
+    font-size: 1.05rem;
+}
+
+.bookmark-btn {
+    margin-top: 20px;
+    background-color: #aed9da;
+    border: none;
+    padding: 15px 35px;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.bookmark-btn:hover {
+    background-color: #93c1c2;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 850px) {
+    .details-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .details-right {
+        text-align: center;
+    }
+}

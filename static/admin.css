@@ -1,0 +1,180 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+body {
+    background-color: #f1f9f1;
+}
+
+/* Perfect Centered Navbar Logic */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-left, .nav-right {
+    flex: 1; /* These take up equal space on the sides */
+    display: flex;
+    align-items: center;
+}
+
+.nav-right {
+    justify-content: flex-end; /* Pushes the badge to the far right */
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.logo-badge {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+}
+/* --- Admin Page Styles --- */
+
+.admin-container {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+/* Controls Header */
+.admin-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.controls-left, .controls-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.admin-title {
+    font-size: 2rem;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-right: 20px;
+}
+
+/* Admin Search Bar */
+.admin-search-box {
+    display: flex;
+    align-items: center;
+    background-color: #aed9da; /* Light teal */
+    padding: 5px 20px;
+    border-radius: 30px;
+    width: 300px;
+}
+
+.search-icon-circle {
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.admin-search-box input {
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 10px 0;
+    font-size: 1rem;
+    color: #333;
+    width: 100%;
+    margin-bottom: 0; /* Override generic input margin */
+}
+
+.admin-search-box input::placeholder {
+    color: #555;
+}
+
+/* Dark Buttons (Add Book & Dropdown) */
+.btn-dark {
+    background-color: #243c5a; /* Dark Navy Blue from wireframe */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-dark:hover {
+    background-color: #1a2b42;
+}
+
+.dropdown-btn {
+    appearance: none;
+    padding-right: 40px;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px top 50%;
+    background-size: 10px auto;
+}
+
+/* List Items */
+.admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.admin-book-item {
+    background-color: #aed9da; /* Light teal */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    border-radius: 12px;
+}
+
+.admin-book-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 15px;
+}
+
+/* White Action Buttons */
+.btn-white {
+    background-color: white;
+    border: none;
+    color: #1a1a1a;
+    padding: 10px 30px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-white:hover {
+    background-color: #f1f1f1;
+}

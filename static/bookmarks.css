@@ -1,0 +1,191 @@
+/* ... Keep Previous Navbar CSS ... */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+body {
+    background-color: #f1f9f1;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+    background-color: #f1f9f1;
+}
+/* Perfect Centered Navbar Logic */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-left, .nav-right {
+    flex: 1; /* These take up equal space on the sides */
+    display: flex;
+    align-items: center;
+}
+
+.nav-right {
+    justify-content: flex-end; /* Pushes the badge to the far right */
+}
+
+.nav-center {
+    flex: 2; /* Takes up the middle space */
+    display: flex;
+    justify-content: center; /* Centers the links inside the middle space */
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+/* 2. Sub-Navbar (The links below the white bar) */
+.sub-navbar {
+    display: flex;
+    justify-content: center;
+    padding: 30px 0 10px 0; /* Adds breathing room above the links */
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #444;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.nav-links li.active a {
+    color: #000;
+    border-bottom: 2px solid #000;
+    padding-bottom: 5px;
+}
+
+
+.logo-badge {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+}
+
+.bookmarks-container {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.page-title {
+    font-size: 2.2rem;
+    font-weight: 500;
+    margin-bottom: 40px;
+    color: #1a1a1a;
+}
+
+.bookmarks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.bookmark-item {
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+}
+
+.bookmark-item:hover {
+    transform: scale(1.01);
+}
+
+.item-info {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.small-cover {
+    width: 60px;
+    height: 90px;
+    background: #eee;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.small-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.text-details h3 {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+}
+
+.text-details p {
+    color: #666;
+    font-size: 1rem;
+}
+
+/* Actions */
+.item-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.view-btn {
+    background-color: #aed9da;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.view-btn:hover {
+    background-color: #93c1c2;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.remove-btn {
+    background-color: transparent;
+    border: 1.5px solid #ff6b6b;
+    color: #ff6b6b;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.special-p {
+    margin-bottom: 20px;
+}
+
+.remove-btn:hover {
+    background-color: #ff6b6b;
+    color: white;
+}

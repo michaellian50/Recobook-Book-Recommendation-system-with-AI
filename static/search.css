@@ -1,0 +1,241 @@
+/* --- GLOBAL RESET & BASE --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f1f9f1;
+    color: #333;
+}
+
+/* Hide scrollbar for a cleaner look */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+/* --- NAVBAR STYLES --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-left, .nav-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.nav-right {
+    justify-content: flex-end;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+/* 2. Sub-Navbar (The links below the white bar) */
+.sub-navbar {
+    display: flex;
+    justify-content: center;
+    padding: 30px 0 10px 0; /* Adds breathing room above the links */
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #444;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.nav-links li.active a {
+    color: #000;
+    border-bottom: 2px solid #000;
+    padding-bottom: 5px;
+}
+
+.logo-badge {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+}
+
+/* --- SEARCH PAGE LAYOUT --- */
+.search-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.page-title {
+    margin-bottom: 30px;
+    font-size: 2rem;
+    color: #2c3e50;
+}
+
+/* --- THE SEARCH CONTROLS (THE "PROPER" FIX) --- */
+.search-controls {
+    display: flex;
+    justify-content: center;
+    align-items: stretch; /* Ensures all items have the same height */
+    gap: 12px;
+    max-width: 900px;
+    margin: 0 auto 50px auto;
+}
+
+#searchInput {
+    flex: 2; /* Takes up 2x more space than the dropdown */
+    padding: 15px 25px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background-color: white;
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#searchInput:focus {
+    border-color: #4d7c9a;
+    box-shadow: 0 4px 15px rgba(77, 124, 154, 0.15);
+}
+
+#genreFilter {
+    flex: 0.6;
+    padding: 0 15px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background-color: white;
+    font-size: 0.95rem;
+    color: #444;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    outline: none;
+}
+
+.search-btn {
+    background-color: #4d7c9a;
+    color: white;
+    border: none;
+    padding: 0 35px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(77, 124, 154, 0.2);
+}
+
+.search-btn:hover {
+    background-color: #3a5e75;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(77, 124, 154, 0.3);
+}
+
+/* --- BOOK GRID & CARDS --- */
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
+    padding: 20px 0;
+}
+
+.book-card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.book-card:hover {
+    transform: translateY(-8px);
+}
+
+.book-cover.icon-mode {
+    background-color: #f8f9fa;
+    width: 100%;
+    height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.book-cover img {
+    width: 60px;
+    opacity: 0.7;
+}
+
+.book-title {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: #2c3e50;
+    min-height: 2.4em; /* Ensures titles don't break grid alignment */
+}
+
+.book-author {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-bottom: 15px;
+}
+
+.details-btn {
+    margin-top: auto; /* Pushes button to bottom of card */
+    background-color: transparent;
+    border: 2px solid #4d7c9a;
+    color: #4d7c9a;
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.details-btn:hover {
+    background-color: #4d7c9a;
+    color: white;
+}
+
+/* --- RESPONSIVE MOBILE --- */
+@media (max-width: 768px) {
+    .search-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #searchInput, #genreFilter, .search-btn {
+        width: 100%;
+        max-width: 400px;
+        height: 50px;
+    }
+}

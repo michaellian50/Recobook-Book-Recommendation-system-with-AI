@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recobook - Book Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='details.css') }}"></head>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo-text">Recobook</div>
+        </div>
+
+        <div class="nav-right">
+            <div class="logo-badge">
+                <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20">
+                <span>Recobook</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="details-container">
+        <div class="back-nav">
+            <a href="javascript:history.back()" class="back-link">← Back </a>
+        </div>
+
+        <div class="details-card">
+            <div class="details-left">
+                <div class="large-book-cover icon-mode">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="Book Icon">
+                </div>
+            </div>
+
+            <div class="details-right">
+                <h1 class="details-title">{{ book.title }}</h1>
+                <h3 class="details-author">By {{ book.authors }}</h3>
+            
+                <div class="info-section">
+                <h4>Genre:</h4>
+                <p>{{ book.genres }}</p>
+                </div>
+
+                <div class="info-section">
+                    <h4>Summary:</h4>
+                    <p class="summary-text">
+                        {{ book.description }}
+                    </p>
+                </div>
+
+                <button class="bookmark-btn" onclick="addBookmark('{{ book.book_id }}')">Add to Bookmarks</button>
+            </div>
+        </div>
+    </main>
+<script>
+async function addBookmark(bookId) {
+    try {
+        const response = await fetch(`/api/bookmark/${bookId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert("Book added to your bookmarks!");
+            // Optional: Change button text so user knows it worked
+            document.querySelector('.bookmark-btn').innerText = "Bookmarked ✓";
+            document.querySelector('.bookmark-btn').style.backgroundColor = "#2ecc71";
+        } else {
+            alert(result.message || "Failed to add bookmark.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again.");
+    }
+}
+</script>
+</body>
+</html>

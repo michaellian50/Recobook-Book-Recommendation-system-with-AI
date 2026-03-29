@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recobook - Search</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}"></head>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo-text">Recobook</div>
+        </div>
+        
+        <div class="nav-right">
+            <div class="logo-badge">
+                <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20">
+                <span>Recobook</span>
+            </div>
+        </div>
+    </header>
+
+        <nav class="sub-navbar">
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/quiz_page">Quiz</a></li>
+                <li><a href="/bookmarks_page">Bookmarks</a></li>
+                <li class="active"><a href="#">Search Book</a></li>
+                <li><a href="/profile_page">Profile</a></li>
+            </ul>
+        </nav>
+
+    <main class="search-container">
+        <h1 class="page-title">Search Book</h1>
+        
+        <div class="search-controls">
+            <input type="text" placeholder="Search by title, author, or even a mood..." id="searchInput">
+            
+            <select id="genreFilter" onchange="performSearch()">
+                <option value="">All Genres</option>
+                <option value="Fiction">Fiction</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Romance">Romance</option>
+                <option value="Mystery">Mystery</option>
+                <option value="Science-fiction">Sci-Fi</option>
+                <option value="Thriller">Thriller</option>
+                <option value="Non-fiction">Non-Fiction</option>
+            </select>
+
+            <button class="search-btn" onclick="performSearch()">Search</button>
+        </div>
+
+        <div class="book-grid" id="searchResults"></div>
+    </main>
+
+<script>
+async function performSearch() {
+    const query = document.getElementById('searchInput').value;
+    const genre = document.getElementById('genreFilter').value;
+    const resultsGrid = document.getElementById('searchResults');
+
+    resultsGrid.innerHTML = '<p>Searching...</p>';
+
+    const response = await fetch('/api/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: query, genre: genre })
+    });
+
+    const books = await response.json();
+    resultsGrid.innerHTML = '';
+
+    if (books.length === 0) {
+        resultsGrid.innerHTML = '<p>No books found matching your criteria.</p>';
+        return;
+    }
+
+    books.forEach(book => {
+        resultsGrid.innerHTML += `
+            <div class="book-card">
+                <div class="book-cover icon-mode">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="Book Icon">
+                </div>
+                <h3 class="book-title">${book.title}</h3>
+                <p class="book-author">${book.authors}</p>
+                <p class="book-genre" style="font-size: 0.8rem; color: #666;">${book.genres}</p>
+                <button class="details-btn" onclick="window.location.href='/details/${book.book_id}'">Details</button>
+            </div>
+        `;
+    });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recobook - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}"></head>
+<body>
+
+    <header class="navbar">
+        <div class="logo-text">Recobook</div>
+        <div class="logo-badge">
+            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20">
+            <span>Recobook</span>
+        </div>
+    </header>
+
+    <nav class="sub-navbar">
+        <ul class="nav-links">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="/quiz_page">Quiz</a></li>
+            <li><a href="/bookmarks_page">Bookmarks</a></li>
+            <li><a href="/searchbook_page">Search Book</a></li>
+            <li><a href="/profile_page">Profile</a></li>
+        </ul>
+    </nav>
+
+    <main class="home-container">
+        <section class="hero-text">
+            <h1>Discover Your Next Favorite Book</h1>
+            <p>Our AI-powered system uses psychological profiling to match you <br>
+               with books you'll love. Answer a few questions and let us find your <br>
+               perfect read.</p>
+        </section>
+
+        <div class="info-card">
+            <div class="step">
+                <div class="circle">1</div>
+                <h3>Take the Quiz</h3>
+                <p>Answer psychology-inspired questions about your reading preferences</p>
+            </div>
+            <div class="step">
+                <div class="circle">2</div>
+                <h3>AI Analysis</h3>
+                <p>Our NLP model analyzes your responses to understand your unique taste</p>
+            </div>
+            <div class="step">
+                <div class="circle">3</div>
+                <h3>Get Recommendations</h3>
+                <p>Receive personalized book suggestions with match scores</p>
+            </div>
+        </div>
+
+        <button class="cta-button" onclick="window.location.href='/quiz_page'">Start Discovery Quiz</button>
+    </main>
+
+</body>
+</html>
