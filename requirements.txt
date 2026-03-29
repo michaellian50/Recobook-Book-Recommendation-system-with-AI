@@ -1,0 +1,7 @@
+flask
+flask-sqlalchemy
+werkzeug
+numpy
+scikit-learn
+sentence-transformers
+pickle5
