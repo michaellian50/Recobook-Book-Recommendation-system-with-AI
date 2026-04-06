@@ -9,6 +9,11 @@ body {
     background-color: #f1f9f1;
 }
 
+/* Hide scrollbar for a cleaner look */
+body::-webkit-scrollbar {
+    display: none;
+}
+
 /* Perfect Centered Navbar Logic */
 .navbar {
     display: flex;

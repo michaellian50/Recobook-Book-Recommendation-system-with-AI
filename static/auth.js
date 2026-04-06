@@ -40,10 +40,14 @@ if (loginForm) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
             });
+            
             const result = await response.json();
+            
             if (response.ok) {
-                alert("Login successful!");
-                window.location.href = '/'; 
+                alert(result.message); // Will say "Login successful" or "Admin login successful"
+                
+                // IMPORTANT: Use result.redirect from Flask instead of '/'
+                window.location.href = result.redirect; 
             } else {
                 alert(result.message);
             }

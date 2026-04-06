@@ -265,10 +265,36 @@ def register():
 def login():
     data = request.get_json()
     user = User.query.filter_by(email=data['email']).first()
+    
     if user and user.check_password(data['password']):
+        # 1. Update the role in the database
+        if user.email == 'michael@admin.com': 
+            user.role = 'admin'
+            db.session.commit()
+            # Refresh the user object from the database to be 100% sure
+            db.session.refresh(user) 
+
+        # 2. Save info to session (Now using the updated role)
         session['user_id'] = user.user_id
-        return jsonify({"message": "Login successful"}), 200
+        session['role'] = user.role 
+        
+        # 3. Use the session role for the redirect logic
+        if session.get('role') == 'admin':
+            return jsonify({"message": "Admin login successful", "redirect": "/admin_dashboard"}), 200
+        else:
+            return jsonify({"message": "Login successful", "redirect": "/"}), 200
+            
     return jsonify({"message": "Invalid credentials"}), 401
+
+@app.route('/admin_dashboard')
+def admin_dashboard():
+    # Security check: Are you logged in? Are you an admin?
+    if 'user_id' not in session or session.get('role') != 'admin':
+        return redirect('/login_page')
+    
+    # Fetch books to show in the admin table
+    all_books = Book.query.order_by(Book.book_id.desc()).limit(100).all()
+    return render_template('admin.html', books=all_books)
 
 if __name__ == '__main__':
     app.run(debug=True)
