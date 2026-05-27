@@ -36,3 +36,5 @@ cache/
 
 # Logs
 *.log
+
+.env
