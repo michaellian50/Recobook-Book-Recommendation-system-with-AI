@@ -3,81 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recobook - Book Details</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='details.css') }}"></head>
+    <title>Recobook | {{ book.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='details.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header class="navbar">
-        <div class="nav-left">
-            <div class="logo-text">Recobook</div>
-        </div>
-
-        <div class="nav-right">
-            <div class="logo-badge">
-                <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20">
-                <span>Recobook</span>
-            </div>
+        <div class="logo-text">Recobook</div>
+        <div class="logo-badge">
+            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20" style="filter: invert(1);">
+            <span>Recobook AI</span>
         </div>
     </header>
 
     <main class="details-container">
         <div class="back-nav">
-            <a href="javascript:history.back()" class="back-link">← Back </a>
+            <a href="javascript:history.back()" class="back-link">← Back to Recommendations</a>
         </div>
 
         <div class="details-card">
             <div class="details-left">
-                <div class="large-book-cover icon-mode">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="Book Icon">
+                <div class="large-book-cover">
+                    <img src="{{ book.image_url if book.image_url else 'https://cdn-icons-png.flaticon.com/512/2232/2232688.png' }}" 
+                        alt="{{ book.title }}"
+                        class="actual-cover">
+                </div>
+                
+                <div class="rating-container">
+                    <span class="star-icon">★</span>
+                    <span class="rating-value">{{ book.average_rating if book.average_rating else 'N/A' }}</span>
+                    <span class="rating-label">/ 5.0</span>
                 </div>
             </div>
 
             <div class="details-right">
                 <h1 class="details-title">{{ book.title }}</h1>
-                <h3 class="details-author">By {{ book.authors }}</h3>
-            
+                <h3 class="details-author">by {{ book.authors }}</h3>
+
                 <div class="info-section">
-                <h4>Genre:</h4>
-                <p>{{ book.genres }}</p>
+                    <h4>Genre</h4>
+                    <span class="genre-tag">{{ book.genres }}</span>
                 </div>
 
                 <div class="info-section">
-                    <h4>Summary:</h4>
+                    <h4>Summary</h4>
                     <p class="summary-text">
                         {{ book.description }}
                     </p>
                 </div>
 
-                <button class="bookmark-btn" onclick="addBookmark('{{ book.book_id }}')">Add to Bookmarks</button>
+                {% if is_bookmarked %}
+                    <button class="bookmark-btn" style="background: #2ecc71; box-shadow: 0 10px 20px rgba(46, 204, 113, 0.3);" disabled>
+                        Saved to Library ✓
+                    </button>
+                {% else %}
+                    <button class="bookmark-btn" onclick="addBookmark('{{ book.book_id }}')">
+                        Add to My Library
+                    </button>
+                {% endif %}
             </div>
         </div>
     </main>
-<script>
-async function addBookmark(bookId) {
-    try {
-        const response = await fetch(`/api/bookmark/${bookId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
+
+    <script>
+    async function addBookmark(bookId) {
+        try {
+            const response = await fetch(`/api/bookmark/${bookId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                const btn = document.querySelector('.bookmark-btn');
+                btn.innerText = "Saved to Library ✓";
+                btn.style.background = "#2ecc71";
+                btn.style.boxShadow = "0 10px 20px rgba(46, 204, 113, 0.3)";
+                btn.disabled = true; // Prevents re-clicking
+                btn.onclick = null;   // Removes the event listener
+            } else if (response.status === 401) {
+                alert("Please login to save books");
+                window.location.href = '/login_page';
+            } else {
+                alert(result.message || "Failed to add bookmark.");
             }
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            alert("Book added to your bookmarks!");
-            // Optional: Change button text so user knows it worked
-            document.querySelector('.bookmark-btn').innerText = "Bookmarked ✓";
-            document.querySelector('.bookmark-btn').style.backgroundColor = "#2ecc71";
-        } else {
-            alert(result.message || "Failed to add bookmark.");
+        } catch (error) {
+            console.error("Error:", error);
         }
-    } catch (error) {
-        console.error("Error:", error);
-        alert("An error occurred. Please try again.");
     }
-}
-</script>
+    </script>
 </body>
 </html>

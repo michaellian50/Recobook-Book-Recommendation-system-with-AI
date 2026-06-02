@@ -11,20 +11,32 @@ model = SentenceTransformer('all-MiniLM-L6-v2')
 conn = sqlite3.connect('instance/recobook.db')
 cursor = conn.cursor()
 
-# 3. Pull all books that have a description
-cursor.execute("SELECT book_id, description FROM book WHERE description IS NOT NULL")
-books = cursor.fetchall() # This gives us a list of (id, description)
+# 3. Pull book_id, genre, and description
+# Note: I'm selecting 'genre' now as well.
+cursor.execute("SELECT book_id, genres, description FROM book WHERE description IS NOT NULL")
+books = cursor.fetchall() 
 
-book_ids = [b[0] for b in books]
-descriptions = [b[1] for b in books]
+book_ids = []
+combined_texts = []
 
-print(f"Vectorizing {len(descriptions)} book descriptions. Please wait...")
+for b_id, genre, desc in books:
+    book_ids.append(b_id)
+    
+    # Handle potential None values for genre
+    genre_text = genre if genre else "Unknown Genre"
+    
+    # COMBINING LOGIC: 
+    # We put the genre at the front and repeat it slightly to give it more 'weight'
+    # Final format: "Genre: Fantasy. Fantasy. Description: A story about..."
+    text_to_vectorize = f"Genre: {genre_text}. {genre_text}. Description: {desc}"
+    combined_texts.append(text_to_vectorize)
 
-# 4. The AI Magic: Turn text into numbers (Vectors)
-# show_progress_bar=True helps you see how long it takes
-embeddings = model.encode(descriptions, show_progress_bar=True)
+print(f"Vectorizing {len(combined_texts)} books (Genre + Description). Please wait...")
 
-# 5. Save the results so we never have to do this again
+# 4. The AI Magic: Turn the combined text into Vectors
+embeddings = model.encode(combined_texts, show_progress_bar=True)
+
+# 5. Save the results
 data_to_save = {
     "book_ids": book_ids,
     "embeddings": embeddings
@@ -33,5 +45,5 @@ data_to_save = {
 with open("book_embeddings.pkl", "wb") as f:
     pickle.dump(data_to_save, f)
 
-print("Success! 'book_embeddings.pkl' has been created.")
+print("Success! 'book_embeddings.pkl' has been updated with Genre + Description data.")
 conn.close()

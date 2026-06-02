@@ -3,35 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recobook - Profile</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}"></head>
+    <title>Recobook | My Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header class="navbar">
-        <div class="nav-left">
-            <div class="logo-text">Recobook</div>
-        </div>
-        
-        
-
-        <div class="nav-right">
-            <div class="logo-badge">
-                <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20">
-                <span>Recobook</span>
-            </div>
+        <div class="logo-text">Recobook</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/quiz_page">Quiz</a></li>
+            <li><a href="/bookmarks_page">Bookmarks</a></li>
+            <li><a href="/searchbook_page">Search</a></li>
+            <li class="active"><a href="/profile_page">Profile</a></li>
+        </ul>
+        <div class="logo-badge">
+            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20" style="filter: invert(1);">
+            <span>Recobook AI</span>
         </div>
     </header>
-
-        <nav class="sub-navbar">
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="quiz_page">Quiz</a></li>
-                <li><a href="/bookmarks_page">Bookmarks</a></li>
-                <li><a href="searchbook_page">Search Book</a></li>
-                <li class="active"><a href="#">Profile</a></li>
-            </ul>
-        </nav>
 
     <main class="profile-container">
         <div class="profile-header">
@@ -43,26 +34,116 @@
 
         <div class="profile-card">
             <div class="profile-field">
-                <label>Name</label>
+                <label>Full Name</label>
                 <div class="field-value">{{ user.name }}</div>
             </div>
 
             <div class="profile-field">
-                <label>Email</label>
+                <label>Email Address</label>
                 <div class="field-value">{{ user.email }}</div>
             </div>
 
             <div class="profile-field">
-                <label>Password</label>
-                <div class="field-value">••••••••••••</div>
+                <label>Current Book Profile</label>
+                <!-- Use Jinja2 to pull directly from the database user object -->
+                <div class="field-value" style="color: #6c5ce7; font-weight: 700; text-transform: capitalize;">
+                    {{ user.current_genre }}
+                </div>
             </div>
 
             <div class="profile-actions">
-                <button class="edit-btn">Edit Profile</button>
-                <button class="logout-btn" onclick="window.location.href='/logout'">Log out</button>
+                <button class="edit-btn">Edit Details</button>
+                <button class="logout-btn" onclick="secureLogout()">Log out</button>
             </div>
         </div>
     </main>
 
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3>Update Profile</h3>
+            <form id="editForm">
+                <div class="profile-field">
+                    <label>Update Name</label>
+                    <input type="text" id="editName" value="{{ user.name }}" class="field-value" style="width: 100%;">
+                </div>
+                <div class="profile-field">
+                    <label>Update Email</label>
+                    <input type="email" id="editEmail" value="{{ user.email }}" class="field-value" style="width: 100%;">
+                </div>
+                <div class="profile-field">
+                    <label>New Password</label>
+                    <input type="password" id="editPassword" placeholder="Keep current password" class="field-value" style="width: 100%;">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" onclick="closeModal()">Back</button>
+                    <button type="submit" class="save-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<script>
+const modal = document.getElementById("editModal");
+function openModal() { modal.style.display = "flex"; }
+function closeModal() { modal.style.display = "none"; }
+
+document.querySelector('.edit-btn').onclick = openModal;
+
+document.getElementById('editForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const payload = {
+        name: document.getElementById('editName').value,
+        email: document.getElementById('editEmail').value,
+        password: document.getElementById('editPassword').value
+    };
+
+    const response = await fetch('/api/update_profile', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+    });
+    
+    if (response.ok) {
+        alert("Profile updated successfully!");
+        location.reload();
+    } else {
+        const errorData = await response.json();
+        alert(errorData.message || "Update failed.");
+    }
+};
+function secureLogout() {
+    // 1. Clear the AI Profile from browser memory
+    sessionStorage.removeItem('user_quiz_prompt');
+    sessionStorage.removeItem('user_age');
+    
+    // Optional: Clear everything in session storage
+    // sessionStorage.clear(); 
+
+    // 2. Now proceed to the Flask server logout
+    window.location.href = '/logout';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const quizText = sessionStorage.getItem('user_quiz_prompt');
+    const genreDisplay = document.getElementById('user-genre-display');
+
+    if (quizText && genreDisplay) {
+        // Extract genres from "I am looking for a sci_fi and fantasy book..."
+        const match = quizText.match(/looking for a (.*?) book/i);
+        
+        if (match && match[1]) {
+            // Format for a clean look: sci_fi -> Sci-Fi
+            const cleanGenres = match[1]
+                .replace(/_/g, '-')
+                .replace(/\band\b/gi, '&')
+                .trim();
+            
+            genreDisplay.innerText = cleanGenres;
+            genreDisplay.style.fontWeight = "700";
+            genreDisplay.style.color = "#6c757d"; // Match your brand purple
+        }
+    }
+});
+</script>
 </body>
 </html>

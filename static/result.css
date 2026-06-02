@@ -1,134 +1,173 @@
-/* ... Keep Navbar CSS from the previous response ... */
+/* General Resets & Modern Typography */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
+/* 1. Consistent Background and Scrollbar */
 body {
-    background-color: #f1f9f1;
+    min-height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                url("/static/bg.jpg"); 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; 
+    background-repeat: no-repeat;
+    color: #2d3436;
 }
 
 body::-webkit-scrollbar {
     display: none;
-    background-color: #f1f9f1;
 }
-/* Perfect Centered Navbar Logic */
+
+/* Consistent Modern Navbar */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 40px;
-    background: white;
-    border-bottom: 1px solid #ddd;
+    padding: 15px 60px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
-.nav-left, .nav-right {
-    flex: 1; /* These take up equal space on the sides */
-    display: flex;
-    align-items: center;
-}
-
-.nav-right {
-    justify-content: flex-end; /* Pushes the badge to the far right */
-}
-
-.nav-center {
-    flex: 2; /* Takes up the middle space */
-    display: flex;
-    justify-content: center; /* Centers the links inside the middle space */
-}
-
 .logo-text {
-    font-size: 1.5rem;
-    font-weight: 500;
-}
-
-/* 2. Sub-Navbar (The links below the white bar) */
-.sub-navbar {
-    display: flex;
-    justify-content: center;
-    padding: 30px 0 10px 0; /* Adds breathing room above the links */
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a1a1a;
 }
 
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 30px;
+    gap: 35px;
 }
 
 .nav-links a {
     text-decoration: none;
-    color: #444;
-    font-size: 1.1rem;
+    color: #636e72;
     font-weight: 500;
+    transition: color 0.3s;
 }
 
 .nav-links li.active a {
     color: #000;
-    border-bottom: 2px solid #000;
-    padding-bottom: 5px;
+    font-weight: 700;
+    position: relative;
+}
+
+.nav-links li.active a::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #6c5ce7;
+    border-radius: 2px;
 }
 
 .logo-badge {
     background-color: #1a1a1a;
     color: white;
-    padding: 8px 15px;
-    border-radius: 8px;
+    padding: 10px 20px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-weight: bold;
+    gap: 10px;
 }
 
-/* ... Keep the Navbar CSS from our previous session ... */
+/* 3. Loading Container Glassmorphism */
+#loading-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 50px;
+    border-radius: 30px;
+    text-align: center;
+    margin: 40px auto;
+    max-width: 600px;
+}
 
+#loading-container p {
+    color: #dfe6e9 !important; /* Lighter color for visibility on dark bg */
+}
+
+/* Results Container */
 .results-container {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 60px auto;
     text-align: center;
-    padding: 0 20px;
+    padding: 0 40px;
+    animation: fadeIn 0.8s ease-out;
 }
 
-.results-title {
-    font-size: 2.2rem;
-    font-weight: 500;
-    margin-bottom: 50px;
+h1.results-title {
+    color: #6c5ce7;
 }
 
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 2. Standardize the Title height (Exactly 2 lines) */
+.book-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+    
+    /* Fixed height for 2 lines of text */
+    height: 2.8rem; 
+    line-height: 1.4rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Truncates text after 2 lines */
+    -webkit-box-orient: vertical;
+}
+
+/* Modern Book Grid */
+/* Modern Book Grid - Updated for 3 per row */
 .book-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 40px;
-    margin-bottom: 60px;
+    grid-template-columns: repeat(3, 1fr); /* Forces exactly 3 columns */
+    gap: 30px;
+    margin-bottom: 80px;
 }
 
+/* 4. Book Cards & Match Badge */
 .book-card {
-    background: white;
-    padding: 20px;
+    height: 100%; /* Forces cards to expand to the height of the tallest sibling */
     border-radius: 25px;
+    background: rgba(255, 255, 255, 0.85); /* Modern glass look */
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 25px;
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    transition: transform 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    position: relative;
 }
 
 .book-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-15px);
+    box-shadow: 0 20px 40px rgba(108, 92, 231, 0.1);
+    background: white;
 }
 
 .book-cover {
-    width: 160px;
-    height: 240px;
-    border-radius: 10px;
+    width: 100%;
+    height: 280px;
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
 .book-cover img {
@@ -137,71 +176,125 @@ body::-webkit-scrollbar {
     object-fit: cover;
 }
 
-.match-badge {
-    background-color: #4d7c9a;
-    color: white;
+/* Rating Styling */
+.rating-badge {
+    margin-top: auto; /* Pushes everything below the author to the bottom */
+    margin-bottom: 15px;
+    background: #fff9db;
+    color: #f59f00;
     padding: 4px 12px;
-    border-radius: 15px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid #ffe066;
+}
+
+.star {
+    font-size: 1.1rem;
+}
+
+/* Ensure images fill the container nicely */
+.book-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Changed from cover to contain to see full book covers */
+    background: #f8f9fa;
+    transition: transform 0.5s ease;
+}
+
+.book-card:hover .book-cover img {
+    transform: scale(1.05);
+}
+
+.match-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #6c5ce7;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-weight: 800;
     font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 10px;
+    box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+    z-index: 5;
 }
 
 .book-title {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 700;
-    margin-bottom: 4px;
-    color: #222;
+    margin-bottom: 6px;
+    color: #2d3436;
 }
 
+/* 3. Standardize the Author height (Exactly 2 lines) */
 .book-author {
-    color: #666;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    color: #636e72;
     margin-bottom: 15px;
+    
+    /* Fixed height for authors to prevent layout shift */
+    height: 2.4rem; 
+    line-height: 1.2rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
-/* New Details Button Styling */
+/* Details Button */
 .details-btn {
-    background-color: transparent;
-    border: 2px solid #4d7c9a;
-    color: #4d7c9a;
-    padding: 8px 25px;
-    border-radius: 12px;
-    font-weight: 600;
+    margin-top: auto; /* Pushes everything below the author to the bottom */
+    margin-bottom: 15px;
+    width: 100%;
+    background-color: #f1f2f6;
+    border: none;
+    color: #2d3436;
+    padding: 12px 0;
+    border-radius: 15px;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .details-btn:hover {
-    background-color: #4d7c9a;
+    background-color: #6c5ce7;
     color: white;
 }
 
-/* Retake Quiz Button */
+/* 6. Retake Button Tweak */
 .retake-btn {
-    background-color: #aed9da;
-    border: none;
-    padding: 15px 50px;
-    border-radius: 20px;
-    font-size: 1.1rem;
-    font-weight: 600;
+    background: transparent;
+    border: 2px solid #6c5ce7;
+    color: #ffffff;
+    padding: 16px 45px;
+    border-radius: 50px;
+    font-weight: 700;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 40px auto;
 }
 
 .retake-btn:hover {
-    background-color: #93c1c2;
+    background: #6c5ce7;
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
 }
 
-/* The Loading Spinner */
+/* 5. Loader Color Adjustment */
 .loader {
-    border: 8px solid #f3f3f3; /* Light grey */
-    border-top: 8px solid #3498db; /* Recobook Blue */
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top: 4px solid #6c5ce7;
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1.5s linear infinite;
-    margin: 20px auto;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
 }
 
 @keyframes spin {
@@ -209,34 +302,63 @@ body::-webkit-scrollbar {
     100% { transform: rotate(360deg); }
 }
 
-#loading-container p {
-    font-family: 'Poppins', sans-serif;
-    color: #555;
-    font-size: 1.1rem;
-    margin-top: 10px;
+/* --- Responsive Design for Results Page --- */
+
+/* Mobile Devices (max-width: 768px) */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+    }
+
+    .nav-links {
+        gap: 15px;
+        font-size: 0.9rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .results-container {
+        padding: 0 15px; /* Reduced padding to give more room for 2 columns */
+    }
+
+    /* CHANGE: Switch from 1fr to repeat(2, 1fr) for 2 books per row */
+    .book-grid {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 15px; /* Smaller gap for mobile screens */
+    }
+
+    .book-card {
+        padding: 15px; /* Reduced card padding to save space */
+    }
+
+    .book-cover {
+        height: 180px; /* Shortened cover height for mobile 2-column layout */
+    }
+
+    .results-title {
+        font-size: 1.8rem;
+    }
+
+    .book-title {
+        font-size: 1rem; /* Slightly smaller title text */
+    }
 }
 
-/* Styling for the Icon-based Cover */
-.book-cover.icon-mode {
-    background-color: #f8f9fa; /* Light grey background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 200px; /* Match your existing card height */
-    border-radius: 8px 8px 0 0;
-    border-bottom: 1px solid #eee;
-}
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+    .book-grid {
+        grid-template-columns: repeat(2, 1fr); /* Keep 2 columns even on very small screens */
+        gap: 10px;
+    }
 
-.book-cover.icon-mode img {
-    width: 60px; /* Smaller icon size */
-    height: 60px;
-    opacity: 0.6; /* Makes it look more like a subtle placeholder */
-}
-
-.book-card {
-    transition: transform 0.2s;
-}
-
-.book-card:hover {
-    transform: translateY(-5px);
+    .logo-badge {
+        display: none;
+    }
+    
+    .retake-btn {
+        width: 100%;
+        padding: 15px 30px;
+    }
 }

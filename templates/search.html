@@ -3,94 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recobook - Search</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}"></head>
+    <title>Recobook | Library Search</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header class="navbar">
-        <div class="nav-left">
-            <div class="logo-text">Recobook</div>
-        </div>
-        
-        <div class="nav-right">
-            <div class="logo-badge">
-                <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20">
-                <span>Recobook</span>
-            </div>
+        <div class="logo-text">Recobook</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/quiz_page">Quiz</a></li>
+            <li><a href="/bookmarks_page">Bookmarks</a></li>
+            <li class="active"><a href="/searchbook_page">Search</a></li>
+            <li><a href="/profile_page">Profile</a></li>
+        </ul>
+        <div class="logo-badge">
+            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20" style="filter: invert(1);">
+            <span>Recobook AI</span>
         </div>
     </header>
 
-        <nav class="sub-navbar">
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/quiz_page">Quiz</a></li>
-                <li><a href="/bookmarks_page">Bookmarks</a></li>
-                <li class="active"><a href="#">Search Book</a></li>
-                <li><a href="/profile_page">Profile</a></li>
-            </ul>
-        </nav>
-
     <main class="search-container">
-        <h1 class="page-title">Search Book</h1>
+        <h1 class="page-title">Explore the Library</h1>
         
-        <div class="search-controls">
-            <input type="text" placeholder="Search by title, author, or even a mood..." id="searchInput">
+        <div class="search-layout-wrapper">
             
-            <select id="genreFilter" onchange="performSearch()">
-                <option value="">All Genres</option>
-                <option value="Fiction">Fiction</option>
-                <option value="Fantasy">Fantasy</option>
-                <option value="Romance">Romance</option>
-                <option value="Mystery">Mystery</option>
-                <option value="Science-fiction">Sci-Fi</option>
-                <option value="Thriller">Thriller</option>
-                <option value="Non-fiction">Non-Fiction</option>
-            </select>
+            <div class="main-content-area">
+                
+                <div class="search-controls">
+                    <input type="text" placeholder="Search by title, author, or mood..." id="searchInput">
+                    <select id="genreFilter" onchange="performSearch()">
+                        <option value="">All Genres</option>
+                        <option value="Fiction">Fiction</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Mystery">Mystery</option>
+                        <option value="Science-fiction">Sci-Fi</option>
+                        <option value="Thriller">Thriller</option>
+                    </select>
+                    <button class="search-btn" onclick="performSearch()">Search</button>
+                </div>
 
-            <button class="search-btn" onclick="performSearch()">Search</button>
+                <p id="personalization-msg" style="margin-bottom: 25px; display: none; font-weight: 600; color: #6c5ce7;"></p>
+
+                <div class="book-grid" id="searchResults"></div>
+
+                <div id="discovery-section" style="display: none;">
+                    <h2 id="discovery-title">Global Discovery: </h2>
+                    <div class="book-grid" id="externalResults"></div>
+                </div>
+            </div>
+
+            <aside class="hidden-gems-sidebar">
+                <div class="sidebar-header">
+                    <h3>Hidden Gems ✨</h3>
+                    <p>Explore Music, Art, and Poetry</p>
+                </div>
+                <div id="gems-container">
+                    <p style="font-size: 0.8rem; color: #999;">Discovering niche authors...</p>
+                </div>
+            </aside>
         </div>
-
-        <div class="book-grid" id="searchResults"></div>
     </main>
 
 <script>
+// --- PAGE INITIALIZATION ---
+document.addEventListener('DOMContentLoaded', function() {
+    const masterProfile = sessionStorage.getItem('user_quiz_prompt');
+    if (masterProfile) {
+        const match = masterProfile.match(/looking for a (.*?) book/);
+        if (match && match[1]) {
+            const cleanGenres = match[1]; 
+            autoLoadLocalBooks(cleanGenres);
+            document.getElementById('discovery-title').innerText = `Global search: ${cleanGenres}`;
+            document.getElementById('discovery-section').style.display = 'block';
+            fetchExternalBooks(cleanGenres, true);
+        }
+    }
+    loadHiddenGems();
+});
+
+// --- GOOGLE BOOKS DISCOVERY (GLOBAL SEARCH) ---
+async function fetchExternalBooks(query, isSubjectSearch = false) {
+    const grid = document.getElementById('externalResults');
+    const API_KEY = 'AIzaSyDmBvP_iOlFLRPmWNRKo97mfU8MydfFlfk'; 
+    
+    const searchParam = isSubjectSearch ? `subject:${query}` : query;
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchParam)}&maxResults=8&key=${API_KEY}`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.items) {
+            grid.innerHTML = data.items.map(item => {
+                const info = item.volumeInfo;
+                const cover = info.imageLinks ? info.imageLinks.thumbnail : 'https://cdn-icons-png.flaticon.com/512/2232/2232688.png';
+                return `
+                    <div class="book-card">
+                        <div class="book-cover">
+                            <img src="${cover}" alt="${info.title}" style="${info.imageLinks ? '' : 'opacity:0.2; width:40px;'}">
+                        </div>
+                        <h3 class="book-title">${info.title}</h3>
+                        <p class="book-author">${info.authors ? info.authors[0] : 'Unknown Author'}</p>
+                        <a href="${info.infoLink}" target="_blank" class="details-btn">View on Google</a>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #999;">No global results found.</p>`;
+        }
+    } catch (error) { console.error("External Fetch Error:", error); }
+}
+
 async function performSearch() {
-    const query = document.getElementById('searchInput').value;
+    const query = document.getElementById('searchInput').value.trim();
     const genre = document.getElementById('genreFilter').value;
     const resultsGrid = document.getElementById('searchResults');
-
-    resultsGrid.innerHTML = '<p>Searching...</p>';
+    const discoverySection = document.getElementById('discovery-section');
+    const discoveryTitle = document.getElementById('discovery-title');
+    
+    document.getElementById('personalization-msg').style.display = 'none'; 
 
     const response = await fetch('/api/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: query, genre: genre })
     });
-
     const books = await response.json();
-    resultsGrid.innerHTML = '';
+    renderLocalBooks(books.slice(0, 12), resultsGrid);
 
+    if (query !== "") {
+        discoveryTitle.innerText = `Global Search: "${query}"`;
+        discoverySection.style.display = 'block';
+        fetchExternalBooks(query, false); 
+    } 
+    else if (genre !== "") {
+        discoveryTitle.innerText = `Global Discovery: ${genre}`;
+        discoverySection.style.display = 'block';
+        fetchExternalBooks(genre, true); 
+    }
+}
+
+function renderLocalBooks(books, container) {
     if (books.length === 0) {
-        resultsGrid.innerHTML = '<p>No books found matching your criteria.</p>';
+        container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #999;">No books found in our local library.</p>`;
         return;
     }
+    container.innerHTML = books.map(book => {
+        const coverImage = book.image_url && book.image_url !== "" 
+            ? book.image_url 
+            : "https://cdn-icons-png.flaticon.com/512/2232/2232688.png";
 
-    books.forEach(book => {
-        resultsGrid.innerHTML += `
+        return `
             <div class="book-card">
-                <div class="book-cover icon-mode">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="Book Icon">
+                <div class="book-cover">
+                    <img src="${coverImage}" alt="${book.title}" 
+                         style="${book.image_url ? '' : 'opacity: 0.2; width: 40px;'}"
+                         onerror="this.src='https://cdn-icons-png.flaticon.com/512/2232/2232688.png'; this.style.opacity='0.2'; this.style.width='40px';">
                 </div>
                 <h3 class="book-title">${book.title}</h3>
-                <p class="book-author">${book.authors}</p>
-                <p class="book-genre" style="font-size: 0.8rem; color: #666;">${book.genres}</p>
-                <button class="details-btn" onclick="window.location.href='/details/${book.book_id}'">Details</button>
+                <p class="book-author">by ${book.authors}</p>
+                <div class="rating-badge-mini">
+                    <span class="star">★</span> ${book.average_rating ? book.average_rating : 'N/A'}
+                </div>
+                <a href="/details/${book.book_id}" class="details-btn">Details</a>
             </div>
         `;
-    });
+    }).join('');
+}
+
+async function autoLoadLocalBooks(genres) {
+    const resultsGrid = document.getElementById('searchResults');
+    const msg = document.getElementById('personalization-msg');
+    const genreArray = genres.replace(' and ', ' ').split(' ');
+    try {
+        const response = await fetch('/api/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: '', genre: genreArray[0] })
+        });
+        const books = await response.json();
+        if (books.length > 0) {
+            msg.innerText = `Matched ${genres} from our library based on your AI profile`;
+            msg.style.display = 'block';
+            renderLocalBooks(books.slice(0, 12), resultsGrid);
+        }
+    } catch (error) { console.error("Local Auto-Load Error:", error); }
+}
+
+async function loadHiddenGems() {
+    const container = document.getElementById('gems-container');
+    const nicheGenres = ['Cookbooks', 'Sports', 'Music', 'Travel', 'Art', 'Poetry', 'Comics'];
+    const randomGenre = nicheGenres[Math.floor(Math.random() * nicheGenres.length)];
+
+    try {
+        const response = await fetch('/api/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: '', genre: randomGenre })
+        });
+        const books = await response.json();
+        const limitedGems = books.slice(0, 4);
+
+        if (limitedGems.length > 0) {
+            container.innerHTML = `<p style="font-size: 0.7rem; color: #6c5ce7; margin-bottom: 10px; font-weight: 700;">Featured: ${randomGenre}</p>` + 
+            limitedGems.map(book => `
+                <div class="gem-item">
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <img src="${book.image_url || 'https://cdn-icons-png.flaticon.com/512/2232/2232688.png'}" 
+                             style="width: 30px; height: 40px; object-fit: cover; border-radius: 4px;">
+                        <div>
+                            <h4 style="margin: 0; font-size: 0.8rem;">${book.title}</h4>
+                            <p style="margin: 0; font-size: 0.85rem;">★ ${book.average_rating || 'N/A'}</p>
+                        </div>
+                    </div>
+                    <a href="/details/${book.book_id}" style="font-size: 0.85rem; text-decoration: none; color: #6c5ce7; display: block; margin-top: 5px;">Details →</a>
+                </div>
+            `).join('');
+        }
+    } catch (e) { console.error("Gems Error:", e); }
 }
 </script>
-
 </body>
 </html>

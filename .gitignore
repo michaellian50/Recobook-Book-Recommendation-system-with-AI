@@ -1,0 +1,12 @@
+.env
+
+# Ignore compiled Python cache files
+__pycache__/
+*.pyc
+
+# Ignore local database states (keeps your personal records off GitHub)
+instance/
+*.db
+
+# Ignore raw data files / spreadsheets
+*.xlsx

@@ -3,46 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recobook - Discovery Quiz</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='quiz.css') }}"></head>
+    <title>Recobook | AI Book Discovery</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='quiz.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header class="navbar">
-        <div class="nav-left">
-            <div class="logo-text">Recobook</div>
-        </div>
-        
-        <div class="nav-right">
-            <div class="logo-badge">
-                <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20">
-                <span>Recobook</span>
-            </div>
+        <div class="logo-text">Recobook</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li class="active"><a href="/quiz_page">Quiz</a></li>
+            <li><a href="/bookmarks_page">Bookmarks</a></li>
+            <li><a href="/searchbook_page">Search</a></li>
+            <li><a href="/profile_page">Profile</a></li>
+        </ul>
+        <div class="logo-badge">
+            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20" style="filter: invert(1);">
+            <span>Recobook AI</span>
         </div>
     </header>
 
-    <nav class="sub-navbar">
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li class="active"><a href="#">Quiz</a></li>
-                <li><a href="/bookmarks_page">Bookmarks</a></li>
-                <li><a href="/searchbook_page">Search Book</a></li>
-                <li><a href="/profile_page">Profile</a></li>
-            </ul>
-        </nav>
-
     <main class="quiz-container">
+        <div class="progress-container">
+            <div class="progress-bar-bg">
+                <div id="progressBar" class="progress-bar-fill" style="width: 6.6%"></div>
+            </div>
+        </div>
+
         <div class="quiz-card">
-            <p id="questionNumber" class="question-number">Question 1 of 5</p>
+            <p id="questionNumber" class="question-number">Question 1 of 15</p>
             <h2 id="questionText" class="question-text">How do you prefer your story to unfold?</h2>
 
             <div id="optionsGroup" class="options-group">
-                </div>
-
+                <button class="option-btn">Slow-burn development with deep character focus</button>
+                <button class="option-btn">Fast-paced action with constant plot twists</button>
+            </div>
+            <!-- Inside the .quiz-card in quiz.html -->
+        <div class="button-group" style="display: flex; gap: 15px; justify-content: center;">
+            <button id="prevBtn" class="next-btn" style="background: #dfe6e9; color: #2d3436; display: none;">Previous</button>
             <button id="nextBtn" class="next-btn">Next Question</button>
         </div>
+        </div>
     </main>
-
+    
     <script src="{{ url_for('static', filename='quiz.js') }}"></script>
 </body>
 </html>

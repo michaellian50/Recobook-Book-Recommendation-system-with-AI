@@ -3,56 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recobook - Home</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}"></head>
+    <title>Recobook | AI Book Discovery</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
 <body>
 
     <header class="navbar">
         <div class="logo-text">Recobook</div>
+        <ul class="nav-links">
+            <li class="active"><a href="#home">Home</a></li>
+            <li><a href="/quiz_page">Quiz</a></li>
+            <li><a href="/bookmarks_page">Bookmarks</a></li>
+            <li><a href="/searchbook_page">Search</a></li>
+            <li><a href="/profile_page">Profile</a></li>
+        </ul>
         <div class="logo-badge">
-            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20">
-            <span>Recobook</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20" style="filter: invert(1);">
+            <span>Recobook AI</span>
         </div>
     </header>
 
-    <nav class="sub-navbar">
-        <ul class="nav-links">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="/quiz_page">Quiz</a></li>
-            <li><a href="/bookmarks_page">Bookmarks</a></li>
-            <li><a href="/searchbook_page">Search Book</a></li>
-            <li><a href="/profile_page">Profile</a></li>
-        </ul>
-    </nav>
-
-    <main class="home-container">
+    <main class="home-container" id="home">
         <section class="hero-text">
-            <h1>Discover Your Next Favorite Book</h1>
-            <p>Our AI-powered system uses psychological profiling to match you <br>
-               with books you'll love. Answer a few questions and let us find your <br>
-               perfect read.</p>
+            <h1>Discover Your Next <br> Favorite Book</h1>
+            <p>Our AI-powered system uses deep learning and psychological profiling <br>
+               to match you with books you'll actually love.</p>
         </section>
 
         <div class="info-card">
             <div class="step">
                 <div class="circle">1</div>
-                <h3>Take the Quiz</h3>
-                <p>Answer psychology-inspired questions about your reading preferences</p>
+                <h3>Psychology Quiz</h3>
+                <p>Complete a 15-question quiz designed to map your personality to book genres.</p>
             </div>
             <div class="step">
                 <div class="circle">2</div>
-                <h3>AI Analysis</h3>
-                <p>Our NLP model analyzes your responses to understand your unique taste</p>
+                <h3>NLP Analysis</h3>
+                <p>Our MiniLM-L6 model processes your profile to find semantic matches in our library.</p>
             </div>
             <div class="step">
                 <div class="circle">3</div>
-                <h3>Get Recommendations</h3>
-                <p>Receive personalized book suggestions with match scores</p>
+                <h3>Smart Discovery</h3>
+                <p>Get instant recommendations with personalized match scores and insights.</p>
             </div>
         </div>
 
         <button class="cta-button" onclick="window.location.href='/quiz_page'">Start Discovery Quiz</button>
+        {% if user_name == "Guest" %}
+            <div class="secondary-actions">
+                <p class="login-hint">Already have an account?</p>
+                <button class="hero-login-btn" onclick="window.location.href='/login_page'">Login here</button>
+            </div>
+        {% endif %}
+        <div class="tech-tag">
+            <span>Powered by <strong>sentence-transformers/all-MiniLM-L6-v2</strong></span>
+        </div>
     </main>
+
+    <section class="technical-section" id="technical">
+        <div class="tech-container">
+            <h2 class="section-title">Technical Deep Dive</h2>
+            
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <div class="tech-icon">📊</div>
+                    <h3>The Dataset</h3>
+                        <p>Recobook utilizes a curated library of over 6,000 book records. Each entry includes metadata and detailed summaries, which are vectorized and mapped against user profiles to provide accuracy recommendations.</p>                    <ul class="tech-list">
+                        <li>Comprehensive Book Summaries</li>
+                        <li>Multi-Genre Classification</li>
+                    </ul>
+                </div>
+
+                <div class="tech-card highlight">
+                    <div class="tech-icon">🧠</div>
+                    <h3>The Intelligence</h3>
+                    <p>We use the <strong>all-MiniLM-L6-v2</strong> sentence-transformer model. This allows us to convert text into 384-dimensional vectors for precise semantic similarity searching.</p>
+                    <ul class="tech-list">
+                        <li>Semantic Vector Embeddings</li>
+                        <li>NLP-based Profile Matching</li>
+                        <li>Cosine Similarity Optimization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 Recobook - Book Recommendation System using AI | Universiti Malaysia Sarawak (UNIMAS)</p>
+    </footer >
 
 </body>
 </html>

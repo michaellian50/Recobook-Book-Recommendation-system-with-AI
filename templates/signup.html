@@ -3,30 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recobook - Sign Up</title>
+    <title>Recobook | Sign Up</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="navbar">
         <div class="logo-text">Recobook</div>
         <div class="logo-badge">
-            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="book icon" width="20">
-            <span>Recobook</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="book icon" width="20" style="filter: invert(1);">
+            <span>Recobook AI</span>
         </div>
     </header>
 
     <main class="container">
-        <h1 class="main-title">Recobook - Book Recommendation System <br> with AI</h1>
+        <h1 class="main-title">Join the AI-Powered <br> Reading Revolution</h1>
+        
         <div class="login-card">
-            <h2>Sign Up</h2>
+            <h2>Create Account</h2>
             <form id="signupForm">
-                <input type="text" id="name" placeholder="Name" required>
-                <input type="email" id="email" placeholder="Email" required>
+                <input type="text" id="name" placeholder="Full Name" required>
+                <input type="email" id="email" placeholder="Email Address" required>
                 <input type="password" id="password" placeholder="Password" required>
                 <button type="submit" class="login-btn">Sign Up</button>
             </form>
+            
+            <p class="footer-text">Already have an account? <a href="/login_page">Login</a></p>
         </div>
-        <p class="footer-text">Already have an account? <a href="/login_page">Login</a></p>
     </main>
 
     <script src="{{ url_for('static', filename='auth.js') }}"></script>

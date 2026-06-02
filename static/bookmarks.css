@@ -1,102 +1,103 @@
-/* ... Keep Previous Navbar CSS ... */
+/* General Resets & Typography */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
 body {
-    background-color: #f1f9f1;
+    min-height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                url("/static/bg.jpg"); 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; 
+    background-repeat: no-repeat;
+    color: #2d3436;
 }
 
-body::-webkit-scrollbar {
-    display: none;
-    background-color: #f1f9f1;
-}
-/* Perfect Centered Navbar Logic */
+/* Modern Glass Navbar */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 40px;
-    background: white;
-    border-bottom: 1px solid #ddd;
+    padding: 15px 60px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
-.nav-left, .nav-right {
-    flex: 1; /* These take up equal space on the sides */
-    display: flex;
-    align-items: center;
-}
-
-.nav-right {
-    justify-content: flex-end; /* Pushes the badge to the far right */
-}
-
-.nav-center {
-    flex: 2; /* Takes up the middle space */
-    display: flex;
-    justify-content: center; /* Centers the links inside the middle space */
-}
-
 .logo-text {
-    font-size: 1.5rem;
-    font-weight: 500;
-}
-
-/* 2. Sub-Navbar (The links below the white bar) */
-.sub-navbar {
-    display: flex;
-    justify-content: center;
-    padding: 30px 0 10px 0; /* Adds breathing room above the links */
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a1a1a;
 }
 
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 30px;
+    gap: 35px;
 }
 
 .nav-links a {
     text-decoration: none;
-    color: #444;
-    font-size: 1.1rem;
+    color: #636e72;
     font-weight: 500;
+    transition: color 0.3s;
 }
 
 .nav-links li.active a {
     color: #000;
-    border-bottom: 2px solid #000;
-    padding-bottom: 5px;
+    font-weight: 700;
+    position: relative;
 }
 
+.nav-links li.active a::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #6c5ce7;
+    border-radius: 2px;
+}
 
 .logo-badge {
     background-color: #1a1a1a;
     color: white;
-    padding: 8px 15px;
-    border-radius: 8px;
+    padding: 10px 20px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-weight: bold;
+    gap: 10px;
 }
 
+/* Bookmarks Layout */
 .bookmarks-container {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 60px auto;
-    padding: 0 20px;
+    padding: 0 40px;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .page-title {
-    font-size: 2.2rem;
-    font-weight: 500;
+    font-size: 2.8rem;
+    font-weight: 800;
     margin-bottom: 40px;
-    color: #1a1a1a;
+    /* Changed gradient to start with white for better visibility */
+    background: linear-gradient(135deg, #ffffff 0%, #a29bfe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .bookmarks-list {
@@ -105,87 +106,275 @@ body::-webkit-scrollbar {
     gap: 20px;
 }
 
+/* Glassmorphism Bookmark Item */
 .bookmark-item {
-    background: white;
+    background: rgba(255, 255, 255, 0.85); /* Slightly more opaque for readability */
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 30px;
-    border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease;
+    padding: 25px 35px;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
 }
 
 .bookmark-item:hover {
-    transform: scale(1.01);
+    transform: translateX(10px);
+    background: white;
+    box-shadow: 0 15px 35px rgba(108, 92, 231, 0.1);
 }
 
 .item-info {
     display: flex;
     align-items: center;
-    gap: 25px;
+    gap: 30px;
 }
 
 .small-cover {
-    width: 60px;
-    height: 90px;
-    background: #eee;
-    border-radius: 8px;
-    overflow: hidden;
+    width: 70px;
+    height: 100px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
 .small-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 40%;
+    opacity: 0.3;
 }
 
 .text-details h3 {
-    font-size: 1.3rem;
-    margin-bottom: 5px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #2d3436;
 }
 
-.text-details p {
-    color: #666;
-    font-size: 1rem;
+.author-text {
+    color: #636e72;
+    font-size: 1.05rem;
+    margin-bottom: 8px;
 }
 
-/* Actions */
+.saved-date {
+    display: inline-block;
+    background: #f1f2f6;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-weight: 600;
+}
+
+/* Ensure the book cover looks sharp and fills the container */
+.small-cover {
+    width: 70px;
+    height: 100px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    overflow: hidden; /* Important for the image corners */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.bookmark-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover; /* Prevents stretching */
+    opacity: 1 !important; /* Overriding previous 0.3 opacity */
+}
+
+/* Layout for rating and date together */
+.meta-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 8px;
+}
+
+.rating-mini {
+    background: #fff9db;
+    color: #f59f00;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border: 1px solid #ffe066;
+}
+
+.saved-date {
+    font-size: 0.85rem;
+    color: #95a5a6;
+    background: #f1f2f6;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-weight: 600;
+}
+
+/* Modern Actions */
 .item-actions {
     display: flex;
-    gap: 15px;
+    gap: 12px;
 }
 
 .view-btn {
-    background-color: #aed9da;
+    background: #6c5ce7;
+    color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-weight: 600;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: 700;
     cursor: pointer;
+    transition: all 0.3s;
 }
 
 .view-btn:hover {
-    background-color: #93c1c2;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background: #5b4bc4;
+    transform: scale(1.05);
 }
 
 .remove-btn {
-    background-color: transparent;
-    border: 1.5px solid #ff6b6b;
-    color: #ff6b6b;
+    background: transparent;
+    border: 2px solid #fab1a0;
+    color: #e17055;
     padding: 10px 20px;
-    border-radius: 10px;
-    font-weight: 600;
+    border-radius: 12px;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s;
-}
-
-.special-p {
-    margin-bottom: 20px;
+    transition: all 0.3s;
 }
 
 .remove-btn:hover {
-    background-color: #ff6b6b;
+    background: #ff7675;
+    border-color: #ff7675;
     color: white;
+}
+
+/* 4. Update Empty State visibility */
+.empty-state {
+    background: rgba(255, 255, 255, 0.1); /* Subtle dark glass look */
+    backdrop-filter: blur(10px);
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 30px;
+    padding: 60px !important;
+}
+
+.empty-state .special-p {
+    color: #dfe6e9; /* Light grey text */
+}
+
+/* --- Responsive Design for Bookmarks --- */
+
+/* Tablet and Small Laptops (max-width: 1024px) */
+@media (max-width: 1024px) {
+    .navbar {
+        padding: 15px 30px;
+    }
+
+    .bookmarks-container {
+        padding: 0 20px;
+        margin: 40px auto;
+    }
+
+    .page-title {
+        font-size: 2.2rem;
+    }
+}
+
+/* Mobile Devices (max-width: 768px) */
+@media (max-width: 768px) {
+    /* Navbar stack */
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+    }
+
+    .nav-links {
+        gap: 15px;
+        font-size: 0.9rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* Bookmark Item: Change from Row to Column */
+    .bookmark-item {
+        flex-direction: column;
+        align-items: flex-start; /* Align content to left */
+        gap: 20px;
+        padding: 25px;
+    }
+
+    .item-info {
+        flex-direction: row; /* Keep image and text side-by-side */
+        gap: 20px;
+        width: 100%;
+    }
+
+    .text-details h3 {
+        font-size: 1.2rem;
+    }
+
+    /* Actions: Full width buttons */
+    .item-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Buttons side-by-side */
+        gap: 10px;
+    }
+
+    .view-btn, .remove-btn {
+        width: 100%;
+        padding: 12px 10px;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    .page-title {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+    .logo-text {
+        font-size: 1.3rem;
+    }
+
+    .nav-links {
+        gap: 10px;
+    }
+
+    .nav-links a {
+        font-size: 0.9rem;
+    }
+
+    .item-info {
+        flex-direction: column; /* Stack image on top of text for very small screens */
+        align-items: center;
+        text-align: center;
+    }
+
+    .meta-row {
+        justify-content: center;
+    }
+
+    .item-actions {
+        grid-template-columns: 1fr; /* Stack buttons vertically */
+    }
+
+    .logo-badge {
+        display: none;
+    }
+
+    .empty-state {
+        padding: 40px 20px !important;
+    }
 }

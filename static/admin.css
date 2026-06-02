@@ -86,17 +86,10 @@ body::-webkit-scrollbar {
     display: flex;
     align-items: center;
     background-color: #aed9da; /* Light teal */
-    padding: 5px 20px;
+    padding: 2px 5px 2px 20px; /* Reduced right padding for the button */
     border-radius: 30px;
-    width: 300px;
-}
-
-.search-icon-circle {
-    width: 25px;
-    height: 25px;
-    background-color: white;
-    border-radius: 50%;
-    margin-right: 15px;
+    width: 350px; /* Slightly wider to accommodate the button */
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
 .admin-search-box input {
@@ -106,8 +99,27 @@ body::-webkit-scrollbar {
     padding: 10px 0;
     font-size: 1rem;
     color: #333;
-    width: 100%;
-    margin-bottom: 0; /* Override generic input margin */
+    flex: 1; /* Takes up remaining space */
+}
+
+.btn-find {
+    background-color: #243c5a; /* Matching your brand navy */
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn-find:hover {
+    background-color: #1a2b42;
+    transform: scale(1.02);
+}
+
+.btn-find:active {
+    transform: scale(0.98);
 }
 
 .admin-search-box input::placeholder {
@@ -182,4 +194,85 @@ body::-webkit-scrollbar {
 
 .btn-white:hover {
     background-color: #f1f1f1;
+}
+
+/* Layout Alignment */
+.admin-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.admin-actions-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.filter-group {
+    display: flex;
+    gap: 0;
+}
+
+/* Professional Filter Styling */
+.btn-filter {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    min-width: 200px;
+}
+
+.btn-filter:focus {
+    outline: none;
+    border-color: #243c5a;
+}
+
+/* Pagination Styling */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.page-indicator {
+    font-weight: 500;
+    color: #666;
+}
+
+/* Book Item Tweaks */
+.book-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.book-id {
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: bold;
+}
+
+.stat-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.stat-card p {
+    margin: 0;
+    /* Using your existing brand color for the numbers */
+    color: #243c5a; 
 }

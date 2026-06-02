@@ -3,33 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recobook - My Bookmarks</title>
+    <title>Recobook | My Bookmarks</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='bookmarks.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header class="navbar">
-        <div class="nav-left">
-            <div class="logo-text">Recobook</div>
-        </div>
-
-        <div class="nav-right">
-            <div class="logo-badge">
-                <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20">
-                <span>Recobook</span>
-            </div>
-        </div>
-    </header>
-
-    <nav class="sub-navbar">
+        <div class="logo-text">Recobook</div>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
             <li><a href="/quiz_page">Quiz</a></li>
-            <li class="active"><a href="#">Bookmarks</a></li>
-            <li><a href="/searchbook_page">Search Book</a></li>
+            <li class="active"><a href="/bookmarks_page">Bookmarks</a></li>
+            <li><a href="/searchbook_page">Search</a></li>
             <li><a href="/profile_page">Profile</a></li>
         </ul>
-    </nav>
+        <div class="logo-badge">
+            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20" style="filter: invert(1);">
+            <span>Recobook AI</span>
+        </div>
+    </header>
 
     <main class="bookmarks-container">
         <h1 class="page-title">Saved Bookmarks</h1>
@@ -39,15 +32,21 @@
                 {% for bookmark in books %}
                 <div class="bookmark-item">
                     <div class="item-info">
-                        <div class="small-cover icon-mode">
-                            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="Book Icon" width="40">
+                        <div class="small-cover">
+                            <img src="{{ bookmark.book.image_url if bookmark.book.image_url else 'https://cdn-icons-png.flaticon.com/512/2232/2232688.png' }}" 
+                                alt="{{ bookmark.book.title }}"
+                                class="bookmark-img">
                         </div>
                         <div class="text-details">
                             <h3>{{ bookmark.book.title }}</h3>
-                            <p class="author-text">{{ bookmark.book.authors }}</p>
-                            <p class="saved-date" style="font-size: 0.8rem; color: #888;">
-                                Saved on: {{ bookmark.saved_at.strftime('%d %b %Y') }}
-                            </p>
+                            <p class="author-text">by {{ bookmark.book.authors }}</p>
+                            
+                            <div class="meta-row">
+                                <span class="rating-mini">★ {{ bookmark.book.average_rating if bookmark.book.average_rating else 'N/A' }}</span>
+                                <p class="saved-date">
+                                    Saved {{ bookmark.saved_at.strftime('%d %b %Y') }}
+                                </p>
+                            </div>
                         </div>
                     </div>
                     <div class="item-actions">
@@ -57,9 +56,9 @@
                 </div>
                 {% endfor %}
             {% else %}
-                <div class="empty-state" style="text-align: center; padding: 40px;">
-                    <p class="special-p">No bookmarks saved yet. Start exploring!</p>
-                    <button class="view-btn" onclick="window.location.href='/quiz_page'">Take the Quiz</button>
+                <div class="empty-state" style="text-align: center;">
+                    <p class="special-p">Your reading list is empty. Ready for some AI-powered suggestions?</p>
+                    <button class="view-btn" onclick="window.location.href='/quiz_page'">Start Discovery Quiz</button>
                 </div>
             {% endif %}
         </div>
@@ -73,7 +72,7 @@
                 });
                 
                 if (response.ok) {
-                    location.reload(); // Refresh the page to show it's gone
+                    location.reload(); 
                 } else {
                     alert("Failed to remove bookmark.");
                 }

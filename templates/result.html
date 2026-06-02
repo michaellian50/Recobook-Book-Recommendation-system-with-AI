@@ -3,96 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recobook - Results</title>
+    <title>Recobook | Your Results</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='result.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header class="navbar">
-        <div class="nav-left">
-            <div class="logo-text">Recobook</div>
-        </div>
-        <div class="nav-right">
-            <div class="logo-badge">
-                <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20">
-                <span>Recobook</span>
-            </div>
-        </div>
-    </header>
-
-    <nav class="sub-navbar">
+        <div class="logo-text">Recobook</div>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
             <li class="active"><a href="/quiz_page">Quiz</a></li>
             <li><a href="/bookmarks_page">Bookmarks</a></li>
-            <li><a href="/searchbook_page">Search Book</a></li>
+            <li><a href="/searchbook_page">Search</a></li>
             <li><a href="/profile_page">Profile</a></li>
         </ul>
-    </nav>
+        <div class="logo-badge">
+            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="icon" width="20" style="filter: invert(1);">
+            <span>Recobook AI</span>
+        </div>
+    </header>
 
     <main class="results-container">
-        <h1 class="results-title">Your Personalized Recommendation</h1>
+        <h1 class="results-title">Your AI Matches</h1>
         
-        <div id="loading-container" style="text-align: center; padding: 50px;">
-            <p>Our AI is analyzing your profile...</p>
-            <div class="loader"></div> </div>
+        <div id="user-profile-summary" style="display: none; margin-bottom: 30px;">
+            <h2 id="display-profile" style="font-size: 1.8rem; font-weight: 700; color: #6c5ce7; text-transform: capitalize;"></h2>
+        </div>
+
+        <div id="loading-container">
+            <div class="loader"></div> 
+            <p style="color: #636e72; font-weight: 500;">Analyzing your psychological profile with NLP...</p>
+        </div>
 
         <div class="book-grid" id="book-grid">
             </div>
 
-        <button class="retake-btn" onclick="window.location.href='/quiz_page'">Retake Quiz</button>
+        <button class="retake-btn" onclick="retakeQuiz()">Retake Quiz</button>
     </main>
 
-    <script>
-        async function fetchRecommendations() {
-            const quizText = sessionStorage.getItem('user_quiz_prompt');
-            
-            if (!quizText) {
-                alert("No quiz data found. Please take the quiz first.");
-                window.location.href = '/quiz_page';
-                return;
-            }
+<script>
+// Core rendering engine broken out into its own function
+function renderBooks(books) {
+    document.getElementById('loading-container').style.display = 'none';
+    const grid = document.getElementById('book-grid');
+    grid.innerHTML = ''; 
 
-            try {
-                const response = await fetch('/api/recommend', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ quiz_text: quizText })
-                });
+    if (!books || books.length === 0) {
+        grid.innerHTML = "<p>No matches found. Try retaking the quiz with different options!</p>";
+        return;
+    }
 
-                const books = await response.json();
-                
-                // Hide loading message
-                document.getElementById('loading-container').style.display = 'none';
-                
-                const grid = document.getElementById('book-grid');
-                grid.innerHTML = ''; // Clear the grid
+    books.forEach(book => {
+        const coverImage = book.image_url || "https://cdn-icons-png.flaticon.com/512/2232/2232688.png";
+        grid.innerHTML += `
+            <div class="book-card">
+                <div class="book-cover">
+                    <img src="${coverImage}" alt="${book.title}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2232/2232688.png';">
+                </div>
+                <div class="match-badge">${Math.round(book.match_score * 100)}% Match</div>
+                <h3 class="book-title">${book.title}</h3>
+                <p class="book-author">by ${book.authors}</p>
+                <div class="rating-badge"><span class="star">★</span> ${book.average_rating || 'N/A'}</div>
+                <button class="details-btn" onclick="window.location.href='/details/${book.book_id}'">View Details</button>
+            </div>`;
+    });
+}
 
-                books.forEach(book => {
-                // This is where you paste the new code
-                const bookCard = `
-                    <div class="book-card">
-                        <div class="book-cover icon-mode">
-                            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="Book Icon">
-                        </div>
-                        <div class="match-badge">${Math.round(book.match_score * 100)}% Match</div>
-                        <h3 class="book-title">${book.title}</h3>
-                        <p class="book-author">${book.authors}</p>
-                        <button class="details-btn" onclick="window.location.href='/details/${book.book_id}'">Details</button>
-                    </div>
-                `;
-                // This line actually injects the card into your HTML grid
-                grid.innerHTML += bookCard;
-                });
+async function initializeResults() {
+    const quizText = sessionStorage.getItem('user_quiz_prompt');
+    const userAge = sessionStorage.getItem('user_age') || 'adult';
+    const cachedBooks = sessionStorage.getItem('recommended_books');
 
-            } catch (error) {
-                console.error("Error fetching recommendations:", error);
-                document.getElementById('loading-container').innerHTML = "<p>Something went wrong. Please ensure the server is running.</p>";
-            }
+    if (!quizText) {
+        alert("No quiz data found. Please take the quiz first.");
+        window.location.href = '/quiz_page';
+        return;
+    }
+
+    // Handle UI for Profile Header Genre Text
+    const profileDisplay = document.getElementById('display-profile');
+    const profileSection = document.getElementById('user-profile-summary');
+    const match = quizText.match(/looking for a (.*?) book/i);
+    if (match && match[1]) {
+        const cleanGenres = match[1].replace(/_/g, '-').replace(/\band\b/gi, '&').trim();
+        profileDisplay.innerText = cleanGenres;
+        profileSection.style.display = 'block';
+    }
+
+    // OPTIMIZATION: If quiz.js already fetched the books, render immediately!
+    if (cachedBooks) {
+        try {
+            const books = JSON.parse(cachedBooks);
+            renderBooks(books);
+            return; // Exit early, no backend request needed!
+        } catch(e) {
+            console.error("Error parsing cached books, falling back to network fetch...", e);
+        }
+    }
+
+    // FALLBACK: If user refreshes the page and cache is gone, fetch from network
+    try {
+        const response = await fetch('/api/recommend', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ quiz_text: quizText, age: userAge })
+        });
+
+        if (response.status === 503) {
+            document.getElementById('loading-container').innerHTML = 
+                "<div class='loader'></div><p>AI is warming up... Please wait 15 seconds and refresh.</p>";
+            return;
         }
 
-        // Run the function as soon as the page loads
-        window.onload = fetchRecommendations;
-    </script>
+        const books = await response.json();
+        
+        // Cache them just in case they refresh again
+        sessionStorage.setItem('recommended_books', JSON.stringify(books));
+        renderBooks(books);
+
+    } catch (error) {
+        console.error("Error:", error);
+        document.getElementById('loading-container').innerHTML = "<p>Error connecting to AI server.</p>";
+    }
+}
+
+function retakeQuiz() {
+    // Clear session storage so the user profile reset works perfectly
+    sessionStorage.removeItem('user_quiz_prompt');
+    sessionStorage.removeItem('user_age');
+    sessionStorage.removeItem('recommended_books');
+    window.location.href = '/quiz_page';
+}
+
+// Fire initialization on window load
+window.onload = initializeResults;
+</script>
 </body>
 </html>

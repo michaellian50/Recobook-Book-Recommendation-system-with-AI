@@ -1,13 +1,22 @@
-/* ... Keep Navbar CSS ... */
+/* General Resets & Typography */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
+/* 1. Updated Background to match Home.css */
 body {
-    background-color: #f1f9f1;
+    min-height: 100vh;
+    /* Replaces radial-gradient to match your signature home style */
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                url("/static/bg.jpg"); 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; 
+    background-repeat: no-repeat;
+    color: #2d3436;
 }
 
 body::-webkit-scrollbar {
@@ -15,195 +24,330 @@ body::-webkit-scrollbar {
     background-color: #f1f9f1;
 }
 
-/* Perfect Centered Navbar Logic */
+/* Modern Glass Navbar */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 40px;
-    background: white;
-    border-bottom: 1px solid #ddd;
+    padding: 15px 60px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
-.nav-left, .nav-right {
-    flex: 1; /* These take up equal space on the sides */
-    display: flex;
-    align-items: center;
-}
-
-.nav-right {
-    justify-content: flex-end; /* Pushes the badge to the far right */
-}
-
-.nav-center {
-    flex: 2; /* Takes up the middle space */
-    display: flex;
-    justify-content: center; /* Centers the links inside the middle space */
-}
-
 .logo-text {
-    font-size: 1.5rem;
-    font-weight: 500;
-}
-
-/* 2. Sub-Navbar (The links below the white bar) */
-.sub-navbar {
-    display: flex;
-    justify-content: center;
-    padding: 30px 0 10px 0; /* Adds breathing room above the links */
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: #444;
-    font-size: 1.1rem;
-    font-weight: 500;
-}
-
-.nav-links li.active a {
-    color: #000;
-    border-bottom: 2px solid #000;
-    padding-bottom: 5px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a1a1a;
 }
 
 .logo-badge {
     background-color: #1a1a1a;
     color: white;
-    padding: 8px 15px;
-    border-radius: 8px;
+    padding: 10px 20px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-weight: bold;
+    gap: 10px;
 }
+
+/* Details Layout */
 .details-container {
     max-width: 1100px;
     margin: 40px auto;
-    padding: 0 20px;
+    padding: 0 40px;
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .back-nav {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .back-link {
     text-decoration: none;
-    color: #4d7c9a;
-    font-weight: 600;
+    color: #a29bfe; /* Switched to a lighter purple for contrast */
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s;
 }
 
+.back-link:hover {
+    transform: translateX(-5px);
+}
+
+/* 3. Refined Details Card for Legibility */
 .details-card {
     display: flex;
     gap: 60px;
-    background: white;
-    padding: 50px;
+    /* Slightly higher opacity (0.85) to ensure long summaries remain readable */
+    background: #495057; 
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 60px;
     border-radius: 40px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     align-items: flex-start;
 }
 
-/* Left Side Styling */
+/* Adjusted Left Side Width */
 .details-left {
-    flex: 0 0 300px;
-    text-align: center;
+    flex: 0 0 260px; /* Reduced from 320px */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
+/* Reduced size of the cover container */
 .large-book-cover {
-    width: 300px;
-    height: 450px;
-    background-color: #eee;
+    width: 260px;  /* Smaller width */
+    height: 390px; /* Scaled height (3:2 ratio) */
+    background-color: #f8f9fa;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Ensure the image fills the container properly */
+.actual-cover {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover; /* This prevents stretching */
+    opacity: 1 !important; /* Resetting your previous 0.2 opacity */
+}
+
+/* Rating Badge Styling */
+.rating-container {
+    background: #fff9db;
+    padding: 10px 20px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #ffe066;
+    width: fit-content;
+}
+
+.star-icon {
+    color: #f59f00;
+    font-size: 1.4rem;
+}
+
+.rating-value {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #2d3436;
+}
+
+.rating-label {
+    font-size: 0.8rem;
+    color: #999;
+    margin-top: 3px;
 }
 
 .large-book-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.details-match-badge {
-    background-color: #4d7c9a;
-    color: white;
-    display: inline-block;
-    padding: 10px 25px;
-    border-radius: 25px;
-    font-weight: bold;
-    font-size: 1.1rem;
+    width: 40%;
+    opacity: 0.2;
 }
 
 /* Right Side Styling */
 .details-right {
     flex: 1;
-    text-align: left;
 }
 
+/* 2. Enhanced Title for Dark Background */
 .details-title {
-    font-size: 2.8rem;
-    margin-bottom: 5px;
-    color: #1a1a1a;
+    font-size: 3.2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    /* Signature white-to-purple gradient */
+    background: linear-gradient(135deg, #ffffff 0%, #a29bfe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.1;
 }
 
+/* 4. Sub-header adjustments */
 .details-author {
-    font-size: 1.4rem;
-    color: #666;
-    margin-bottom: 30px;
-    font-weight: 400;
+    font-size: 1.6rem;
+    color: #dfe6e9; /* Lighter color for visibility against dark bg */
+    margin-bottom: 40px;
+    font-weight: 500;
 }
 
 .info-section {
-    margin-bottom: 25px;
+    margin-bottom: 30px;
 }
 
 .info-section h4 {
-    font-size: 1.1rem;
-    color: #1a1a1a;
-    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #6c5ce7;
+    margin-bottom: 10px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
+    font-weight: 800;
+}
+
+.genre-tag {
+    display: inline-block;
+    background: #f1f2f6;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-weight: 600;
+    color: #2d3436;
 }
 
 .summary-text {
     line-height: 1.8;
-    color: #444;
-    font-size: 1.05rem;
+    color: #dee2e6;
+    font-size: 1.1rem;
 }
 
+/* Modern Bookmark Button */
 .bookmark-btn {
     margin-top: 20px;
-    background-color: #aed9da;
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    color: white;
     border: none;
-    padding: 15px 35px;
-    border-radius: 15px;
+    padding: 18px 45px;
+    border-radius: 50px;
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 25px rgba(108, 92, 231, 0.3);
 }
 
 .bookmark-btn:hover {
-    background-color: #93c1c2;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(108, 92, 231, 0.4);
 }
 
-/* Responsive for smaller screens */
-@media (max-width: 850px) {
+/* Responsive */
+@media (max-width: 950px) {
     .details-card {
         flex-direction: column;
         align-items: center;
-        text-align: center;
+        padding: 40px;
+    }
+    .details-left {
+        flex: 0 0 auto;
+        margin-bottom: 40px;
     }
     .details-right {
         text-align: center;
+    }
+}
+
+/* --- Responsive Design for Details Page --- */
+
+/* Tablet and Small Laptops (max-width: 1024px) */
+@media (max-width: 1024px) {
+    .navbar {
+        padding: 15px 30px;
+    }
+
+    .details-container {
+        padding: 0 20px;
+    }
+
+    .details-title {
+        font-size: 2.5rem; /* Scale down the huge title */
+    }
+
+    .details-card {
+        gap: 40px;
+        padding: 40px;
+    }
+}
+
+/* Mobile Devices (max-width: 768px) */
+@media (max-width: 768px) {
+    /* Navbar stack */
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+    }
+
+    /* Details Card Transition */
+    .details-card {
+        flex-direction: column;
+        align-items: center;
+        padding: 30px 20px;
+        border-radius: 30px;
+        text-align: center;
+    }
+
+    .details-left {
+        flex: 0 0 auto;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .large-book-cover {
+        width: 200px; /* Smaller cover for mobile */
+        height: 300px;
+        margin: 0 auto;
+    }
+
+    .details-right {
+        width: 100%;
+    }
+
+    .details-title {
+        font-size: 1.8rem;
+        line-height: 1.2;
+    }
+
+    .details-author {
+        font-size: 1.2rem;
+        margin-bottom: 25px;
+    }
+
+    .summary-text {
+        font-size: 1rem;
+        text-align: justify; /* Better reading experience on mobile */
+    }
+
+    .bookmark-btn {
+        width: 100%; /* Full width button for thumbs */
+        padding: 16px 30px;
+    }
+    
+    .rating-container {
+        margin: 0 auto; /* Center the rating badge */
+    }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+    .logo-text {
+        font-size: 1.3rem;
+    }
+
+    .logo-badge {
+        display: none;
+    }
+
+    .details-title {
+        font-size: 1.5rem;
+    }
+
+    .details-container {
+        margin: 20px auto;
     }
 }
