@@ -121,10 +121,11 @@
                 body: JSON.stringify(data)
             });
 
-            const resData = await response.get_json;
+            // --- FIX: Correct function execution call with parentheses ---
             if (response.ok) {
                 location.reload();
             } else {
+                const resData = await response.json(); // Clean parsing
                 alert(resData ? resData.message : "Error occurred updating profile info.");
             }
         };

@@ -11,6 +11,7 @@ import requests
 import time
 from sklearn.metrics.pairwise import cosine_similarity
 from dotenv import load_dotenv
+from flask import send_file, request, jsonify
 
 load_dotenv()
 # --- HUGGING FACE API CONFIG ---
@@ -143,7 +144,7 @@ def get_recommendations():
         similarities = cosine_similarity(user_vector_np, book_embeddings)[0]
 
         # 5. Get top 50 matches to allow for filtering by age/genre afterwards
-        top_indices = np.argsort(similarities)[-50:][::-1]
+        top_indices = np.argsort(similarities)[-300:][::-1]
         candidate_ids = [book_ids[i] for i in top_indices]
         
         # 6. Database Filter: Fetch books that match the candidate IDs
@@ -235,37 +236,7 @@ def search_books():
         "genres": b.genres, "average_rating": b.average_rating, "image_url": b.image_url
     } for b in books])
 
-@app.route('/api/admin/rebuild_embeddings', methods=['POST'])
-def rebuild_embeddings():
-    if 'user_id' not in session or session.get('role') != 'admin':
-        return jsonify({"message": "Unauthorized"}), 401
 
-    def generate():
-        try:
-            books = Book.query.filter(Book.description.isnot(None)).all()
-            if not books: return
-            
-            new_book_ids, combined_texts = [], []
-            for book in books:
-                new_book_ids.append(book.book_id)
-                combined_texts.append(f"Genre: {book.genres}. Description: {book.description}")
-
-            yield f"data: {json.dumps({'progress': 20, 'message': 'Sending to HF API...'})}\n\n"
-            
-            # Note: For very large datasets, you should chunk combined_texts 
-            # because the API has a limit on input size per request.
-            new_embeddings = query_hf_api(combined_texts)
-            
-            with open("book_embeddings.pkl", "wb") as f:
-                pickle.dump({"book_ids": new_book_ids, "embeddings": new_embeddings}, f)
-
-            global book_ids, book_embeddings
-            book_ids, book_embeddings = new_book_ids, new_embeddings
-            yield f"data: {json.dumps({'progress': 100, 'message': 'Cloud Brain Updated!'})}\n\n"
-        except Exception as e:
-            yield f"data: {json.dumps({'progress': 0, 'message': f'Error: {str(e)}'})}\n\n"
-
-    return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
 # --- REMAINING BOILERPLATE ROUTES ---
 @app.route('/bookmarks_page')
@@ -498,6 +469,118 @@ def admin_save_user():
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": f"Error updating data: {str(e)}"}), 500
+
+# --- MISSING ADMIN BOOK MANAGEMENT ROUTES ---
+
+@app.route('/api/admin/book/save', methods=['POST'])
+def admin_save_book():
+    """Handles both adding a new book and editing an existing book entry."""
+    if session.get('role') != 'admin':
+        return jsonify({"message": "Unauthorized"}), 401
+        
+    data = request.get_json()
+    book_id = data.get('book_id')
+    
+    # If book_id exists, we are EDITING an existing book; otherwise, we are ADDING a new one
+    if book_id and book_id.strip() != "":
+        book = Book.query.get(int(book_id))
+        if not book:
+            return jsonify({"message": "Book entity not found."}), 404
+    else:
+        book = Book()
+        db.session.add(book)
+
+    try:
+        # Map incoming form fields to database columns
+        book.title = data.get('title')
+        book.authors = data.get('authors')
+        book.genres = data.get('genres')
+        book.description = data.get('description')
+        book.image_url = data.get('image_url')
+        
+        # Safely convert rating to a float if provided
+        rating = data.get('average_rating')
+        book.average_rating = float(rating) if rating and str(rating).strip() != "" else 0.0
+
+        db.session.commit()
+        return jsonify({"message": "Book saved successfully."}), 200
+    except Exception as e:
+        db.session.rollback()
+        print(f"Database Save Error: {str(e)}")
+        return jsonify({"message": f"Database Error: {str(e)}"}), 500
+
+
+@app.route('/api/admin/book/delete/<int:book_id>', methods=['DELETE'])
+def admin_delete_book(book_id):
+    """Permanently drops a book out of the relational system catalog."""
+    if session.get('role') != 'admin':
+        return jsonify({"message": "Unauthorized"}), 401
+
+    book = Book.query.get(book_id)
+    if not book:
+        return jsonify({"message": "Book not found."}), 404
+
+    try:
+        # Remove any bookmarks pointing to this book first to keep database clean
+        Bookmark.query.filter_by(book_id=book_id).delete()
+        
+        db.session.delete(book)
+        db.session.commit()
+        return jsonify({"message": "Book deleted successfully from database."}), 200
+    except Exception as e:
+        db.session.rollback()
+        print(f"Database Delete Error: {str(e)}")
+        return jsonify({"message": f"Database Error: {str(e)}"}), 500
+
+@app.route('/api/admin/download_db', methods=['GET'])
+def download_db():
+    """Allows the admin to download the current production SQLite database."""
+    db_path = os.path.join(app.instance_path, 'recobook.db')
+    
+    if os.path.exists(db_path):
+        return send_file(
+            db_path,
+            as_attachment=True,
+            download_name='recobook.db'
+        )
+    return jsonify({"message": "Database file not found."}), 404
+
+
+@app.route('/api/admin/upload_embeddings', methods=['POST'])
+def upload_embeddings():
+    """Accepts a freshly generated book_embeddings.pkl file and overwrites the old one."""
+    if 'file' not in request.files:
+        return jsonify({"message": "No file part in the request."}), 400
+        
+    file = request.files['file']
+    
+    if file.filename == '':
+        return jsonify({"message": "No selected file."}), 400
+        
+    # Security check: Ensure they are actually uploading a .pkl file
+    if file and file.filename.endswith('.pkl'):
+        # Target the root directory where app.py looks for embeddings
+        target_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'book_embeddings.pkl')
+        
+        # Save and overwrite the old file
+        file.save(target_path)
+        
+        # CRITICAL: Tell your global app logic to reload the new embeddings into memory!
+        # (Assuming your global variables are named 'embeddings_data' or similar)
+        try:
+            global book_ids, book_embeddings
+            import pickle
+            with open(target_path, "rb") as f:
+                new_data = pickle.load(f)
+            book_ids = new_data['book_ids']
+            book_embeddings = new_data['embeddings']
+            print("AI Brain successfully reloaded in live memory!")
+        except Exception as e:
+            print(f"Failed to reload embeddings into memory: {e}")
+
+        return jsonify({"message": "Embeddings uploaded and activated successfully!"}), 200
+        
+    return jsonify({"message": "Invalid file type. Please upload a .pkl file."}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)

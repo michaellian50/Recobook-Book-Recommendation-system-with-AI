@@ -45,8 +45,7 @@
 
             <div class="profile-field">
                 <label>Current Book Profile</label>
-                <!-- Use Jinja2 to pull directly from the database user object -->
-                <div class="field-value" style="color: #6c5ce7; font-weight: 700; text-transform: capitalize;">
+                <div id="user-genre-display" class="field-value" style="color: #6c5ce7; font-weight: 700; text-transform: capitalize;">
                     {{ user.current_genre }}
                 </div>
             </div>
@@ -127,20 +126,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const quizText = sessionStorage.getItem('user_quiz_prompt');
     const genreDisplay = document.getElementById('user-genre-display');
 
-    if (quizText && genreDisplay) {
-        // Extract genres from "I am looking for a sci_fi and fantasy book..."
-        const match = quizText.match(/looking for a (.*?) book/i);
+    if (genreDisplay) {
+        // Check if the database value is empty, missing, or default
+        const dbValue = genreDisplay.innerText.trim();
         
-        if (match && match[1]) {
-            // Format for a clean look: sci_fi -> Sci-Fi
-            const cleanGenres = match[1]
-                .replace(/_/g, '-')
-                .replace(/\band\b/gi, '&')
-                .trim();
-            
-            genreDisplay.innerText = cleanGenres;
-            genreDisplay.style.fontWeight = "700";
-            genreDisplay.style.color = "#6c757d"; // Match your brand purple
+        if (!dbValue || dbValue === "No profile detected" || dbValue === "None") {
+            // Backup Plan: Try parsing it from browser memory
+            if (quizText) {
+                const match = quizText.match(/looking for a (.*?) book/i);
+                if (match && match[1]) {
+                    const cleanGenres = match[1]
+                        .replace(/_/g, '-')
+                        .replace(/\band\b/gi, '&')
+                        .trim();
+                    
+                    genreDisplay.innerText = cleanGenres;
+                }
+            } else {
+                genreDisplay.innerText = "No quiz taken yet";
+                genreDisplay.style.color = "#b2bec3";
+            }
         }
     }
 });

@@ -58,8 +58,16 @@
                     <option value="mystery" {% if current_genre == 'mystery' %}selected{% endif %}>Mystery</option>
                 </select>
             </div>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-dark" style="background: #6c5ce7;" onclick="rebuildAI()">⚡ Update AI Brain</button>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <a href="/api/admin/download_db" class="btn-white" style="text-decoration: none; display: inline-flex; align-items: center; padding: 10px 15px;">
+                    📥 Download DB
+                </a>
+
+                <button class="btn-white" onclick="document.getElementById('pklFileInput').click()">
+                    📤 Upload AI Brain (.pkl)
+                </button>
+                <input type="file" id="pklFileInput" accept=".pkl" style="display: none;" onchange="handlePklUpload(this)">
+
                 <button class="btn-dark" onclick="openModal()">+ Add Book</button>
             </div>
             <div id="progress-container" style="display: none; margin-bottom: 30px; background: white; padding: 20px; border-radius: 15px; border: 1px solid #ddd;">
@@ -236,59 +244,39 @@
             window.location.href = url;
         }
 
-        // NEW: Function to trigger AI rebuild
-        async function rebuildAI() {
-            if(!confirm("This will regenerate AI embeddings. The page will remain active during progress. Continue?")) return;
-            
-            const container = document.getElementById('progress-container');
-            const bar = document.getElementById('progress-bar');
-            const statusText = document.getElementById('progress-status');
-            const percentText = document.getElementById('progress-percent');
-            const rebuildBtn = event.target;
+        async function handlePklUpload(input) {
+    if (!input.files || input.files.length === 0) return;
+    
+    const file = input.files[0];
+    if (!confirm(`Are you sure you want to overwrite your active AI system matrix with "${file.name}"?`)) {
+        input.value = ''; // Reset input selection
+        return;
+    }
 
-            // UI Setup
-            container.style.display = 'block';
-            rebuildBtn.disabled = true;
-            rebuildBtn.style.opacity = '0.5';
+    const formData = new FormData();
+    formData.append('file', file);
 
-            try {
-                const response = await fetch('/api/admin/rebuild_embeddings', { method: 'POST' });
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
+    try {
+        const response = await fetch('/api/admin/upload_embeddings', {
+            method: 'POST',
+            body: formData
+        });
 
-                while (true) {
-                    const { value, done } = await reader.read();
-                    if (done) break;
-
-                    const chunk = decoder.decode(value);
-                    const lines = chunk.split('\n');
-
-                    for (let line of lines) {
-                        if (line.startsWith('data: ')) {
-                            const data = JSON.parse(line.replace('data: ', ''));
-                            
-                            // Update UI
-                            bar.style.width = data.progress + '%';
-                            percentText.innerText = data.progress + '%';
-                            statusText.innerText = data.message;
-
-                            if (data.progress === 100) {
-                                setTimeout(() => {
-                                    alert("Success: " + data.message);
-                                    location.reload();
-                                }, 500);
-                            }
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error("Stream error:", error);
-                alert("An error occurred during the update.");
-                container.style.display = 'none';
-                rebuildBtn.disabled = false;
-                rebuildBtn.style.opacity = '1';
-            }
+        const result = await response.json();
+        
+        if (response.ok) {
+            alert("Success! " + result.message);
+            location.reload();
+        } else {
+            alert("Upload failed: " + result.message);
         }
+    } catch (error) {
+        console.error("Upload error:", error);
+        alert("An error occurred during file transmission.");
+    } finally {
+        input.value = ''; // Clear input for future uploads
+    }
+}
     </script>
 </body>
 </html>

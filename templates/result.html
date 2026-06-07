@@ -82,13 +82,27 @@ async function initializeResults() {
     }
 
     // Handle UI for Profile Header Genre Text
+    // Inside your initializeResults() function in result.html
     const profileDisplay = document.getElementById('display-profile');
     const profileSection = document.getElementById('user-profile-summary');
     const match = quizText.match(/looking for a (.*?) book/i);
+
     if (match && match[1]) {
         const cleanGenres = match[1].replace(/_/g, '-').replace(/\band\b/gi, '&').trim();
         profileDisplay.innerText = cleanGenres;
         profileSection.style.display = 'block';
+
+        // --- ADD THIS NEW FETCH BLOCK HERE ---
+        // Automatically persist this profile discovery straight to the database
+        fetch('/api/save_genre', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ genre: cleanGenres })
+        })
+        .then(response => response.json())
+        .then(data => console.log("Database updated profile:", data.message))
+        .catch(err => console.error("Error updating database profile:", err));
+        // -------------------------------------
     }
 
     // OPTIMIZATION: If quiz.js already fetched the books, render immediately!
